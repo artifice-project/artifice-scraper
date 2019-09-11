@@ -1,16 +1,6 @@
+# Artifice Scraper
+
 [![Build Status](https://travis-ci.org/minelminel/flask-boilerplate.svg?branch=master)](https://travis-ci.org/minelminel/flask-boilerplate)
-
-# Flask Boilerplate :potable_water:
-
-This repository contains a sample minimal Flask application structure that includes:
-
-* SQLAlchemy
-* Alembic
-* Celery
-* Pytest
-* Coverage
-
-It runs on Python 3.x
 
 ## Installation
 
@@ -27,6 +17,8 @@ CREATE DATABASE artifice_scraper_test;
 
 Now you can create the tables using Alembic:
 ```bash
+artifice-scraper db init
+artifice-scraper db migrate
 artifice-scraper db upgrade
 ```
 
