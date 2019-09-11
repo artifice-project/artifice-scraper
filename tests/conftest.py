@@ -1,13 +1,13 @@
 import pytest
 
-from app import create_app
-from models import db as _db
+from artifice.scraper.core.app import create_app
+from artifice.scraper.models import db as _db
 from tests.client import ApiTestingResponse
 
 
 @pytest.yield_fixture(scope='session')
 def app():
-    app = create_app(config_file='config/testing.py')
+    app = create_app(config_file='../config/testing.py')
     app.response_class = ApiTestingResponse
     ctx = app.app_context()
     ctx.push()

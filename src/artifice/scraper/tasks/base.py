@@ -1,4 +1,4 @@
-from app import create_celery_app
+from artifice.scraper.core.app import create_celery_app
 
 celery = create_celery_app()
 

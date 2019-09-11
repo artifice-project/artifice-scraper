@@ -1,16 +1,20 @@
 language: python
 python:
-  # - "2.7"
-  - "3.7"
+  - "3.5"
+  - "3.6"
+  - "3.7-dev"
+  - "3.8-dev"
+  - "nightly"
 addons:
   postgresql: "9.4"
-install: pip install -r requirements.txt
+install:
+  - pip install -r requirements.txt
+  - pip install .
 services: postgresql
 before_script:
-  - psql -c 'create database flask_example_test;' -U postgres
-  - psql -c 'create database flask_example;' -U postgres
-  - ./manage.py db upgrade
-script: ./manage.py test
+  - psql -c 'create database artifice_scraper_test;' -U postgres
+  - psql -c 'create database artifice_scraper;' -U postgres
+script: artifice-scraper test
 # after_success
 # after_failure:
 # after_script:

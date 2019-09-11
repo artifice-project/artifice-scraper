@@ -3,12 +3,14 @@ import os
 from celery import Celery
 from flask import Flask
 
-from models import migrate, db
-from resources import api
+from artifice.scraper.models import migrate, db
+from artifice.scraper.resources import api
 
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 config_variable_name = 'FLASK_CONFIG_PATH'
-default_config_path = os.path.join(os.path.dirname(__file__), 'config/local.py')
+default_config_path = os.path.join(os.path.dirname(__file__), '../config/local.py')
+# default_config_path = os.path.join(BASE_DIR, 'config', 'local.py')
 os.environ.setdefault(config_variable_name, default_config_path)
 
 
