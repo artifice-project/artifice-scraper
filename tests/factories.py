@@ -1,6 +1,6 @@
 import factory
 
-from webapp.models import db, Document
+from artifice.scraper.models import db, Document
 
 
 class SQLAlchemyModelFactory(factory.Factory):

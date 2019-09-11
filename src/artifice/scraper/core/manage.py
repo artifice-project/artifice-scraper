@@ -3,7 +3,7 @@ from flask_script import Manager, Command
 from flask_migrate import MigrateCommand
 
 from .app import create_app
-from webapp.tasks import run_celery
+from artifice.scraper.tasks import run_celery
 from .commands import PytestCommand, CoverageCommand
 
 

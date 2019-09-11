@@ -7,18 +7,49 @@ loc = os.path.dirname(os.path.abspath(__file__))
 with open(osp.join(loc, 'requirements.txt')) as f:
     required = f.read().splitlines()
 
+description_text = \
+'''
+-------- ARTIFICE --------
+  "You Are What You See"
+
+Artifice is a project which aims to unravel the
+multi-faceted landscape of our modern media landscape.
+Content is scraped from a wide variety of sources
+and viewpoints and distilled into salient data,
+which we use to train generative text models. The
+output of these models is rendered in a realistic
+mockup resembling a typical site one might encounter
+on the web. In addition to the novelty of computer-
+generated news stories, we also aim to decipher the
+relationships between stories and the discussions
+they spark. By tracking storylines from the first
+mention to the point at which they influence the
+national conversation around an issue, we can provide
+insight into the mechanisms driving our understanding
+of the modern news cycle.
+
+[Web]
+https://www.artifice-project.com/
+[Source]
+https://github.com/artifice-project/artifice-scraper.git
+'''
+
 setup(
-    version="0.0.3",
-    name="webapp",
-    author="@minelminel",
-    url="https://www.github.com/minelminel/flask-boilerplate",
+    version="1.3.0",
+    name="artifice",
+    author=["@minelminel", "@liberty3000"],
+    url="https://www.github.com/artifice-project/artifice-scraper",
     description="Simple web app for testing deployment tools",
+    long_description=description_text,
     install_requires=required,
+    python_requires='>=3.5.*, <4',
     packages=find_packages("src"),
     package_dir={"": "src"},
     entry_points={
         "console_scripts": [
-            "webapp=webapp.core.manage:manager.run",
+            "artifice=artifice.__main__:main",
+            "artifice.scraper=artifice.scraper.core.manage:manager.run",
+            # "name_of_executable = module.with:function_to_execute"
         ]
     }
 )

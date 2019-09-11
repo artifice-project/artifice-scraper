@@ -1,7 +1,7 @@
 import pytest
 
-from webapp.core.app import create_app
-from webapp.models import db as _db
+from artifice.scraper.core.app import create_app
+from artifice.scraper.models import db as _db
 from tests.client import ApiTestingResponse
 
 

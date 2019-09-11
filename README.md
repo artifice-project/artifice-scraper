@@ -21,38 +21,38 @@ First, clone the repository and create a virtualenv. Then install the requiremen
 Before running the application make sure that your local PostgreSQL server is up. Then create the databases:
 
 ```sql
-CREATE DATABASE flask_example;
-CREATE DATABASE flask_example_test;
+CREATE DATABASE artifice_scraper;
+CREATE DATABASE artifice_scraper_test;
 ```
 
 Now you can create the tables using Alembic:
 ```bash
-webapp db upgrade
+artifice-scraper db upgrade
 ```
 
 Finally you can run the application:
 ```bash
-webapp runserver
+artifice-scraper runserver
 ```
 
 or play in the Python REPL:
 ```bash
-webapp shell
+artifice-scraper shell
 ```
 
 In order to run unit tests in py.test invoke:
 ```bash
-webapp test
+artifice-scraper test
 ```
 
 To view test coverage:
 ```bash
-webapp coverage
+artifice-scraper coverage
 ```
 
-There is a preconfigured WSGI module located at `webapp.core.wsgi`. Example usage with Gunicorn:
+There is a preconfigured WSGI module located at `artifice.scraper.core.wsgi`. Example usage with Gunicorn:
 ```bash
-gunicorn --workers 1 --bind 0.0.0.0:8000 webapp.core.wsgi:application
+gunicorn --workers 1 --bind 0.0.0.0:8000 artifice.scraper.core.wsgi:application
 ```
 
 If the process fails to start, try prepending the `gunicorn` with its relative path within your virtual environment, for example `env/bin/gunicorn ...`
