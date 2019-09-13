@@ -14,7 +14,7 @@ services: postgresql
 before_script:
   - psql -c 'create database artifice_scraper_test;' -U postgres
   - psql -c 'create database artifice_scraper;' -U postgres
-script: artifice-scraper test
+script: artifice.scraper test
 # after_success
 # after_failure:
 # after_script:
