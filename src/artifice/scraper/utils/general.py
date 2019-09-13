@@ -32,3 +32,18 @@ def setattrs(obj, **kwargs):
     for k, v in kwargs.items():
         setattr(obj, k, v)
     return obj
+
+def force_json(obj):
+    import json
+    raw_json = json.dumps(obj, indent=4, sort_keys=True, default=str)
+    safe_json = json.loads(raw_json)
+    return safe_json
+
+# def json_serial(obj):
+#     from datetime import date, datetime
+#     '''
+#     JSON serializer for objects not serializable by default `jsonify` function
+#     '''
+#     if isinstance(obj, (datetime, date)):
+#         return obj.isoformat()
+#     raise TypeError('Type {0} not serializable'.format(type(obj)))
