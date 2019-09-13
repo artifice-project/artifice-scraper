@@ -51,7 +51,10 @@ def setup_logging(app):
 
 def create_celery_app(app=None):
     app = app or create_app()
-    celery = Celery(app.name, broker=app.config['CELERY_BROKER_URL'])
+    celery = Celery(app.name,
+        broker=app.config['CELERY_BROKER_URL'],
+        include=app.config['CELERY_INCLUDE'],
+    )
     celery.conf.update(app.config)
     TaskBase = celery.Task
 
