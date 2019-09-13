@@ -11,13 +11,13 @@ clean-pyc:
 	find . -name '*.pyo' -exec rm -f {} +
 
 clean-build:
-	@echo "    clean-build"
-	@echo "        Remove build artifacts."
+	@echo "		clean-build"
+	@echo "				Remove build artifacts."
 	rm -rf build/
 	rm -rf dist/
 	rm -rf *.egg-info
 
 build:
-	@echo "    build"
-	@echo "        Build source distribution & wheel"
+	@echo "		build"
+	@echo "				Build source distribution & wheel"
 	python3 setup.py sdist bdist_wheel
