@@ -14,5 +14,4 @@ class BaseSchema(ma.ModelSchema):
 
 
 class BaseArgSchema(Schema):
-    limit = fields.Int(required=False, default=10)
     limit = fields.Int(required=False, default=constants.ARGS_DEFAULT_LIMIT)
