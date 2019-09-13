@@ -6,6 +6,7 @@ from .base import db
 
 
 class Document(db.Model):
+    __tablename__ = 'document'
     id = Column(Integer(), primary_key=True)
     data = Column(MutableDict.as_mutable(JSONB), nullable=False)
 
