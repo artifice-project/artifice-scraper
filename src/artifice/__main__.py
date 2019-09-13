@@ -36,7 +36,8 @@ https://github.com/artifice-project/artifice-scraper
 """
 
 def artifice_version(*args, **kwargs):
-    ver = "1.3.0"
+    import pkg_resources
+    ver = pkg_resources.get_distribution("Artifice").version
     return "Version " + ver
 
 
