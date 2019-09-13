@@ -3,6 +3,8 @@ from flask import request, jsonify
 from flask_restful import Resource
 from operator import attrgetter
 
+from artifice.scraper.utils import reply_success
+
 
 class IndexResource(Resource):
 
@@ -24,4 +26,4 @@ class IndexResource(Resource):
 
     def get(self):
         routes = self.routes_command()
-        return jsonify(routes)
+        return reply_success(routes)
