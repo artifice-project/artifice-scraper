@@ -1,9 +1,45 @@
-import os
 from flask import current_app
 
 from artifice.scraper.utils import cmp_dict
 
+
 class Supervisor:
+    '''
+    Pseudo-object for accessing and modifying app.config items.
+    Values are declared in config/constants.py and inherited by all config classes.
+    Used in conjunction with the defined schemas, which perform validations.
+
+    # get current status of supervisor values
+    >>> Supervisor.status()
+
+        {
+          "debug": false,
+          "enabled": true,
+          "polite": 10
+        }
+
+
+    # pass validated data to modify with
+    >>> data = schema.dump(request.get_json())
+    >>> changed = Supervisor.handle_changes(data)
+
+        {
+        	"enabled": false,
+        	"polite": 6
+        }
+    # NOTE: if validation was performed correctly,
+    #       `changed` should be identical to `data`
+
+
+    # render the changes in a human-readable manner
+    >>> changed = Supervisor.handle_changes(data)
+    >>> msg = Supervisor.render_msg(changed)
+
+        [
+          "enabled ==> False",
+          "polite ==> 6"
+        ]
+    '''
 
     @classmethod
     def status(cls):
