@@ -14,3 +14,21 @@ def validate_auth(request):
     if client_token != server_token:
         return False
     return True
+
+def _side_load(data):
+    reply = []
+    for key, val in data.items():
+        if isinstance(val, list):
+            for each in val:
+                reply.append({key:each})
+        else:
+            reply.append({key:val})
+    return reply
+
+def side_load(key, data):
+    return _side_load({key: data.get(key)})
+
+def setattrs(obj, **kwargs):
+    for k, v in kwargs.items():
+        setattr(obj, k, v)
+    return obj
