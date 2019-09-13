@@ -3,8 +3,7 @@ import os
 from celery import Celery
 from flask import Flask
 
-from artifice.scraper.models import migrate, db
-from artifice.scraper.resources import api
+
 
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -32,11 +31,15 @@ def create_app(config_file=None, settings_override=None):
 
 
 def init_app(app):
+    # avoid contextual errors by importing all modules atomically HERE
+    from artifice.scraper.models import db
     db.init_app(app)
+    from artifice.scraper.models import migrate
     migrate.init_app(app, db)
+    from artifice.scraper.resources import api
     api.init_app(app)
-    # this is where the magic happens
-    # avoid contextual errors by including all modules atomically HERE
+    from artifice.scraper.schemas import ma
+    ma.init_app(app)
 
 
 def setup_logging(app):

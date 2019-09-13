@@ -50,7 +50,7 @@ gunicorn --workers 1 --bind 0.0.0.0:8000 artifice.scraper.core.wsgi:application
 If the process fails to start, try prepending the `gunicorn` with its relative path within your virtual environment, for example `env/bin/gunicorn ...`
 
 TODO:
-- Connect supervisor object to current_app.config object, rather than a pure object state
+- ~~Connect supervisor object to current_app.config object, rather than a pure object state~~
 - User request body args for content and queue GET requests, rather than url params
 - Copy in utils
 - Copy in schemas
