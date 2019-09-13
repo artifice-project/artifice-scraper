@@ -4,6 +4,7 @@ from .general import (
     validate_auth,
     setattrs,
     force_json,
+    git_sha,
 )
 from .decorators import (
     auth,

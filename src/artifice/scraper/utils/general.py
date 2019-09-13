@@ -39,11 +39,8 @@ def force_json(obj):
     safe_json = json.loads(raw_json)
     return safe_json
 
-# def json_serial(obj):
-#     from datetime import date, datetime
-#     '''
-#     JSON serializer for objects not serializable by default `jsonify` function
-#     '''
-#     if isinstance(obj, (datetime, date)):
-#         return obj.isoformat()
-#     raise TypeError('Type {0} not serializable'.format(type(obj)))
+def git_sha():
+    import git
+    repo = git.Repo(search_parent_directories=True)
+    sha = repo.head.object.hexsha
+    return sha
