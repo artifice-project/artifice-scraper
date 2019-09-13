@@ -1,16 +1,7 @@
-from artifice.etc import (
-    terminal_output,
-    artifice_version,
-    artifice_logo,
-    artifice_help
-)
+from artifice.etc import welcome
 
 def main():
-    terminal_output(
-        artifice_version(),
-        artifice_logo(),
-        artifice_help(),
-    )
+    welcome()
 
 
 if __name__ == '__main__':
