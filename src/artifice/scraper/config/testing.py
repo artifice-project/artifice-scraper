@@ -1,3 +1,4 @@
+from artifice.scraper.config.constants import *
 
 ENV = 'testing'
 DEBUG = True

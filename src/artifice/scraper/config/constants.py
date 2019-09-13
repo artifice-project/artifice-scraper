@@ -1,0 +1,5 @@
+AUTH_TOKEN = 'correcthorsebatterystaple'
+
+SUPERVISOR_DEBUG = False
+SUPERVISOR_ENABLED = True
+SUPERVISOR_POLITE = 10

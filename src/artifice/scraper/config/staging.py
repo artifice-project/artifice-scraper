@@ -1,8 +1,10 @@
 import os
 from datetime import timedelta
+from artifice.scraper.config.constants import *
 
-# DEBUG = True
 ENV = 'production'
+DEBUG = False
+JSONIFY_PRETTYPRINT_REGULAR = True
 SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']

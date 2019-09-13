@@ -1,7 +1,9 @@
 from datetime import timedelta
+from artifice.scraper.config.constants import *
 
 ENV = 'development'
 DEBUG = True
+JSONIFY_PRETTYPRINT_REGULAR = True
 SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/artifice_scraper'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 # SQLALCHEMY_ECHO = True
