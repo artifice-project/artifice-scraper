@@ -1,7 +1,7 @@
 import datetime
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from sqlachemy import Column, Integer, DateTime
+from sqlalchemy import Column, Integer, DateTime
 
 migrate = Migrate()
 db = SQLAlchemy()
