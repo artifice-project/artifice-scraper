@@ -17,8 +17,8 @@ CELERY_INCLUDE = ['artifice.scraper.tasks']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERYBEAT_SCHEDULE = {
-    'scheduled_task': {
-        'task': 'tasks.scheduled_task',
+    'scheduled_tasks': {
+        'task': 'tasks.scheduled_tasks',
         'schedule': timedelta(minutes=2),
         'args': ()
     },
