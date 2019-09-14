@@ -8,7 +8,8 @@ from artifice.scraper.utils import (
     auth,
     reply_success,
     reply_error,
-    reply_auto,
+    reply_empty,
+    reply_conflict,
     requires_body,
 )
 from artifice.scraper.schemas import (
@@ -26,12 +27,29 @@ class ContentResource(Resource):
         '''
         displays the stored content from the database
         '''
-        raise NotImplementedError()
+        args, _ = args_schema.dump(request.get_json())
+        result = db.session.query(Content).limit( \
+                    args.get('limit')).all()
+        data, _ = contents_schema.dump(result)
+        return reply_success(msg=args, reply=data)
 
-    @auth
+    # @auth
     @requires_body
     def post(self):
         '''
         stores scraped content to the database
         '''
-        raise NotImplementedError()
+        data, errors = content_schema.load(request.get_json())
+        if errors:
+            log.error({__class__: errors})
+            return reply_error(errors)
+        elif data:
+            result = db.session.query(Content).filter_by(origin=data.origin).first()
+            if not result:
+                db.session.add(data)
+                db.session.commit()
+                reply, _ = content_schema.dump(data)
+                return reply_success(reply)
+            reply, _ = content_schema.dump(result)
+            return reply_conflict(reply)
+        return reply_empty()

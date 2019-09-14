@@ -52,6 +52,7 @@ class StatusResource(Resource):
         '''
         releases any waiting tasks to the queue for processing
         '''
-        # result = db.session.query(Queue).all()
-        # return reply_success()
+        result = db.session.query(Queue).filter_by(status='READY').all()
+        # for each in result, update status and release to celery
+        # append to reply, return reply
         raise NotImplementedError()

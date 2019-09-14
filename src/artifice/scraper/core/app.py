@@ -29,7 +29,7 @@ def create_app(config_file=None, settings_override=None):
 
 
 def init_app(app):
-    # avoid contextual errors by importing all modules atomically HERE
+    # avoid contextual errors by importing all modules atomically
     from artifice.scraper.models import db
     db.init_app(app)
     from artifice.scraper.models import migrate
@@ -44,8 +44,9 @@ def setup_logging(app):
     if not app.debug:
         import logging
         from logging import FileHandler
-        handler = FileHandler('flask.log')
-        handler.setLevel(logging.DEBUG)
+        log_file = app.config.get('LOG_FILE', 'flask.log')
+        handler = FileHandler(log_file)
+        handler.setLevel(app.config.get('LOG_LEVEL', 'INFO'))
         app.logger.addHandler(handler)
 
 

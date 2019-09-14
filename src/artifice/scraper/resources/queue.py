@@ -9,13 +9,13 @@ from artifice.scraper.utils import (
     requires_body,
     reply_success,
     reply_error,
-    reply_auto,
+    reply_empty,
     side_load,
 )
 from artifice.scraper.schemas import (
-    queue_args_schema,
     queue_schema,
     queues_schema,
+    queue_args_schema,
     queue_task_schema,
 )
 from artifice.scraper.supervisor import Supervisor
@@ -29,20 +29,63 @@ class QueueResource(Resource):
         '''
         show all url entries from the database
         '''
-        raise NotImplementedError()
+        args, _ = queue_args_schema.dump(request.get_json())
+        result = db.session.query(Queue).filter(Queue.status.in_( \
+                    args.get('status'))).limit( \
+                    args.get('limit')).all()
+        data, _ = queues_schema.dump(result)
+        return reply_success(msg=args, reply=data)
 
-    @auth
+    # @auth
     @requires_body
     def post(self):
         '''
         post urls directly to the celery task queue
         '''
-        raise NotImplementedError()
+        json_data = side_load('url', request.get_json())
+        data, errors = queues_schema.load(json_data)
+        if errors:
+            log.error({__class__: errors})
+            return reply_error(errors)
+        elif data:
+            reply = []
+            for each in data:
+                result = db.session.query(Queue).filter_by(url=each.url).first()
+                if not result:
+                    log.debug(' * RECEIVED {0}'.format(each.url))
+                    db.session.add(each)
+                    reply.append(queue_task_schema.dump(each).data)
+                elif result:
+                    log.debug(' * DUPLICATE: {0}'.format(each.url))
+                    pass
+            for each in reply:
+                if not Supervisor.status().get('debug'):
+                    # send to celery
+                    log.debug(' * TASKED {0}'.format(each.get('url')))
+                else:
+                    log.info(' * DEBUG MODE ENABLED {0}'.format(each.get('url')))
+            return reply_success(reply)
+        return reply_empty()
 
-    @auth
+    # @auth
     @requires_body
     def put(self):
         '''
         saves urls to queue database, used only by celery
         '''
-        raise NotImplementedError()
+        data, errors = queue_schema.load(request.get_json())
+        if errors:
+            log.error({__class__: errors})
+            return reply_error(errors)
+        elif data:
+            log.debug(' * RETURNING {0}'.format(queue_schema.dump(data)))
+            result = db.session.query(Queue).filter_by(url=data.url).first()
+            if result:
+                result.status = data.status
+            else:
+                log.error(' * UNEXPECTED {0}'.format(queue_schema.dump(data)))
+                db.session.add(data)
+            db.session.commit()
+            reply, _ = queue_schema.dump(result)
+            return reply_success(reply)
+        return reply_empty()
