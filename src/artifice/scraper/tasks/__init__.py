@@ -1,3 +1,3 @@
-from .scheduled_tasks import scheduled_tasks
-from .callable_tasks import callable_task
+from .scheduled_tasks import *
+from .callable_tasks import *
 from .base import run_celery

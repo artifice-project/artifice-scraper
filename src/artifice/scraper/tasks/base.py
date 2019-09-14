@@ -8,18 +8,20 @@ def run_celery(*args):
     """
     Starts the async task queue
     """
-    # allow settings overrides based on environment label
     if current_app.config.get('ENV') == 'production':
-        args = ['--logfile',
-                current_app.config['CELERY_LOG_FILE'],
-                '-E']
-
+        args = [
+            '--logfile',
+            current_app.config['CELERY_LOG_FILE'],
+            '-E',
+        ]
     celery_app.worker_main(
         [
             '',
             '-B',
             '--loglevel',
             current_app.config['CELERY_LOG_LEVEL'],
+            '--concurrency={0}'.format(
+                current_app.config['CELERY_WORKERS']),
             *args,
         ]
     )
