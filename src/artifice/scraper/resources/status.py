@@ -9,6 +9,8 @@ from artifice.scraper.utils import (
     requires_body,
     reply_success,
     reply_error,
+    reply_empty,
+    send_to_celery,
 )
 from artifice.scraper.models import db, Queue
 from artifice.scraper.schemas import (
@@ -46,13 +48,19 @@ class StatusResource(Resource):
             status = Supervisor.status()
             log.debug(dict(changed=changed))
             return reply_success(msg=msg, **status)
+        return reply_empty()
 
-    @auth
+    # @auth
     def put(self):
         '''
         releases any waiting tasks to the queue for processing
         '''
         result = db.session.query(Queue).filter_by(status='READY').all()
-        # for each in result, update status and release to celery
-        # append to reply, return reply
-        raise NotImplementedError()
+        for each in result:
+            each.status = 'TASKED'
+            if not Supervisor.status['debug']:
+                send_to_celery(each.url)
+                log.debug(' * RELEASED {}'.format(each.url))
+        db.session.commit()
+        reply = queues_schema.dump(result).data
+        return reply_success(reply)
