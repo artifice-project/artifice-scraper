@@ -18,30 +18,30 @@ clean-build:
 	@echo "//		Remove build artifacts."
 	rm -rf build/
 	rm -rf dist/
-	rm -rf */*.egg-info
+	rm -rf */$(PACKAGE).egg-info
 
 clean: clean-pyc clean-build
 
-build: clean-build
+build: clean
 	@echo "//	build"
 	@echo "//		Build source distribution & wheel"
 	python3 setup.py sdist bdist_wheel
 
-reset-db:
-	@echo "//	db-reset"
-	@echo "//		Drop current database(s) and reset migrations"
-	rm -rf migrations/
-	psql -c "DROP DATABASE $DATABASE";
-	psql -c "DROP DATABASE $TEST_DATABASE";
-	psql -c "CREATE DATABASE $DATABASE";
-	psql -c "CREATE DATABASE $TEST_DATABASE";
-	$ENTRYPOINT db init
-	$ENTRYPOINT db migrate
-	$ENTRYPOINT db upgrade
-
-install: clean-build
+install: clean
 	@echo "//	install"
 	@echo "//		Install source editably"
 	virtualenv env
 	source env/bin/activate
 	pip install -e .
+
+reset-db:
+	@echo "//	db-reset"
+	@echo "//		Drop current database(s) and reset migrations"
+	rm -rf migrations/
+	psql -c "DROP DATABASE $(DATABASE)";
+	psql -c "DROP DATABASE $(TEST_DATABASE)";
+	psql -c "CREATE DATABASE $(DATABASE)";
+	psql -c "CREATE DATABASE $(TEST_DATABASE)";
+	$(ENTRYPOINT) db init
+	$(ENTRYPOINT) db migrate
+	$(ENTRYPOINT) db upgrade
