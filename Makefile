@@ -3,33 +3,43 @@
 HOST=127.0.0.1
 TEST_PATH=./
 PACKAGE=Artifice
+DATABASE=artifice_scraper
+TEST_DATABASE=artifice_scraper_test
+ENTRYPOINT=artifice.scraper
 
 clean-pyc:
-	@echo "	clean-pyc"
-	@echo "		Remove python artifacts"
+	@echo "//	clean-pyc"
+	@echo "//		Remove python artifacts"
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
 
 clean-build:
-	@echo "	clean-build"
-	@echo "		Remove build artifacts."
+	@echo "//	clean-build"
+	@echo "//		Remove build artifacts."
 	rm -rf build/
 	rm -rf dist/
-	rm -rf *.egg-info
+	rm -rf */$PACKAGE.egg-info
 
-build:
-	@echo "	build"
-	@echo "		Build source distribution & wheel"
+build: clean-build
+	@echo "//	build"
+	@echo "//		Build source distribution & wheel"
 	python3 setup.py sdist bdist_wheel
 
-db-reset:
-	@echo "	db-reset"
-	@echo "		Drop current database(s) and reset migrations"
+reset-db:
+	@echo "//	db-reset"
+	@echo "//		Drop current database(s) and reset migrations"
 	rm -rf migrations/
-	psql -c "DROP DATABASE artifice_scraper";
-	psql -c "DROP DATABASE artifice_scraper_test";
-	psql -c "CREATE DATABASE artifice_scraper";
-	psql -c "CREATE DATABASE artifice_scraper_test";
-	artifice.scraper db init
-	artifice.scraper db migrate
-	artifice.scraper db upgrade
+	psql -c "DROP DATABASE $DATABASE";
+	psql -c "DROP DATABASE $TEST_DATABASE";
+	psql -c "CREATE DATABASE $DATABASE";
+	psql -c "CREATE DATABASE $TEST_DATABASE";
+	$ENTRYPOINT db init
+	$ENTRYPOINT db migrate
+	$ENTRYPOINT db upgrade
+
+install: clean-build
+	@echo "//	install"
+	@echo "//		Install source editably"
+	virtualenv env
+	source env/bin/activate
+	pip install -e .
