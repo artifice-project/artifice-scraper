@@ -1,61 +1,86 @@
+import time
+import requests
+
 from .base import celery_app
-from .utils import report_done, report_ready
+from .util import report_done, report_ready
 from artifice.scraper.supervisor import Supervisor
 from artifice.scraper.parsers import NPRParser
 
+URL_FOR_QUEUE = celery_app._preconf.get('URL_FOR_QUEUE')
+URL_FOR_CONTENT = celery_app._preconf.get('URL_FOR_CONTENT')
+
 
 @celery_app.task(name='tasks.holding_tank')
-def holding_tank():
+def holding_tank(url, **kwargs):
     '''
     Entrypoint for the Celery queue. Automatically
     executes functions based on application config.
     '''
-    print('Holding Tank')
+    return sorting_hat(url, **kwargs)
+
 
 @celery_app.task(name='tasks.sorting_hat')
-def sorting_hat():
+def sorting_hat(url, **kwargs):
     '''
     Responsible for checking whether service is enabled,
     and whether to scrape the URL or return unfinished.
     '''
-    print('Sorting Hat')
+    status = Supervisor.status()
+    if not status['enabled']:
+        return archive_url(report_ready(url), **kwargs)
+    time.sleep(status['polite'])
+    return fetch_url(url, **kwargs)
+
 
 @celery_app.task(name='tasks.fetch_url')
-def fetch_url():
+def fetch_url(url, **kwargs):
     '''
     Scrapes the URL and passes along the response data
     for content extraction.
     '''
-    print('Fetch URL')
+    response = requests.get(url)
+    return extract_content(response, **kwargs)
+
 
 @celery_app.task(name='tasks.extract_content')
-def extract_content():
+def extract_content(response, **kwargs):
     '''
     Determines which parser should be used based on the URL,
     and extracts the content accordingly.
     '''
-    print('Extract Content')
+    npr = NPRParser(response)
+    content = npr.extract_content()
+    return archive_content(content, **kwargs)
+
 
 @celery_app.task(name='tasks.archive_content')
-def archive_content():
+def archive_content(content, **kwargs):
     '''
     Stores the extracted content to the database via
     API endpoint.
     '''
-    print('Archive Content')
+    response = requests.post(URL_FOR_CONTENT, json=content)
+    fb = feed_back(content)
+    url = content.get('origin')
+    return archive_url(report_done(url), status_code=response.status_code, feedback=fb, **kwargs)
+
 
 @celery_app.task(name='tasks.archive_url')
-def archive_url():
+def archive_url(json_data, **kwargs):
     '''
     Returns the URL to the database via API endpoint,
     status can be either `READY` or `DONE`.
     '''
-    print('Archive URL')
+    response = requests.put(URL_FOR_QUEUE, json=json_data)
+    return response.status_code, {**kwargs}
+
 
 @celery_app.task(name='tasks.feed_back')
-def feed_back():
+def feed_back(content):
     '''
     Automatically add the extracted links from the page
     to the API queue endpoint, perpetuating the process.
     '''
-    print('Feed Back')
+    json_data = dict(url=content.get('url'))
+    response = requests.post(URL_FOR_QUEUE, json=json_data)
+    return response.status_code

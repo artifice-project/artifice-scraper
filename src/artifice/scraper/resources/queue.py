@@ -11,6 +11,7 @@ from artifice.scraper.utils import (
     reply_error,
     reply_empty,
     side_load,
+    send_to_celery,
 )
 from artifice.scraper.schemas import (
     queue_schema,
@@ -60,7 +61,7 @@ class QueueResource(Resource):
                     pass
             for each in reply:
                 if not Supervisor.status().get('debug'):
-                    # send to celery
+                    send_to_celery(each.url)
                     log.debug(' * TASKED {0}'.format(each.get('url')))
                 else:
                     log.info(' * DEBUG MODE ENABLED {0}'.format(each.get('url')))
