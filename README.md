@@ -22,6 +22,11 @@ artifice.scraper db migrate
 artifice.scraper db upgrade
 ```
 
+Start the Celery worker
+```bash
+artifice.scraper runcelery
+```
+
 Finally you can run the application:
 ```bash
 artifice.scraper runserver
@@ -32,7 +37,7 @@ or play in the Python REPL:
 artifice.scraper shell
 ```
 
-In order to run unit tests in py.test invoke:
+In order to run unit tests with app context, invoke:
 ```bash
 artifice.scraper test
 ```

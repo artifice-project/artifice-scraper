@@ -18,7 +18,9 @@ clean-build:
 	@echo "//		Remove build artifacts."
 	rm -rf build/
 	rm -rf dist/
-	rm -rf */$PACKAGE.egg-info
+	rm -rf */*.egg-info
+
+clean: clean-pyc clean-build
 
 build: clean-build
 	@echo "//	build"

@@ -47,7 +47,7 @@ setup(
     package_dir={"": "src"},
     entry_points={
         "console_scripts": [
-            "artifice=artifice.__main__:main",
+            "artifice=artifice.__main__:welcome",
             "artifice.scraper=artifice.scraper.core.manage:manager.run",
             # "name_of_executable = module.with:function_to_execute"
         ]
