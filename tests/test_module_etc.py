@@ -13,9 +13,7 @@ def test_banners_version():
     version = artifice_version()
 
     assert version
-    splt = version.split()
-    assert splt[0] == 'Version'
-    major, minor, micro = splt[-1].split('.')
+    major, minor, micro = version.split('.')
     assert major.isnumeric()
     assert minor.isnumeric()
     assert micro.isnumeric()

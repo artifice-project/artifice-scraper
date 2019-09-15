@@ -1,5 +1,6 @@
 import os
 from datetime import timedelta
+from artifice.scraper.utils import number_of_cores
 from artifice.scraper.config.constants import *
 
 ENV = 'production'
@@ -11,7 +12,7 @@ SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
 CELERY_BACKEND = 'rpc://'
-CELERY_WORKERS = 8
+CELERY_WORKERS = number_of_cores()
 CELERY_LOG_FILE = 'celery.log'
 CELERY_LOG_LEVEL = 'INFO'
 CELERY_INCLUDE = ['artifice.scraper.tasks']
