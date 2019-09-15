@@ -7,6 +7,7 @@ billiard==3.6.1.0
 bs4==0.0.1
 celery==4.3.0
 Click==7.0
+codecov
 factory-boy==2.12.0
 Faker==2.0.1
 Flask==1.1.1
