@@ -33,7 +33,7 @@ class ContentResource(Resource):
         data, _ = contents_schema.dump(result)
         return reply_success(msg=args, reply=data)
 
-    # @auth
+    @auth
     @requires_body
     def post(self):
         '''

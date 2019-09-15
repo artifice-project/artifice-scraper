@@ -37,7 +37,7 @@ class QueueResource(Resource):
         data, _ = queues_schema.dump(result)
         return reply_success(msg=args, reply=data)
 
-    # @auth
+    @auth
     @requires_body
     def post(self):
         '''
@@ -69,7 +69,7 @@ class QueueResource(Resource):
             return reply_success(reply)
         return reply_empty()
 
-    # @auth
+    @auth
     @requires_body
     def put(self):
         '''

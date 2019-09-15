@@ -13,6 +13,7 @@ class PytestCommand(Command):
     def __call__(self, app=None, *args):
         pytest.main(*args)
 
+
 class CoverageCommand(Command):
     """
     Run a test coverage report.

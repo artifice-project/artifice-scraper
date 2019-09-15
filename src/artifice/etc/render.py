@@ -1,7 +1,7 @@
 def terminal_output(*args):
     import sys
-    print(*args, file=sys.stderr)
-    sys.exit(0)
+    print(*args, file=sys.stdout)
+    # sys.exit(0)
 
 def welcome():
     from artifice.etc.banners import (

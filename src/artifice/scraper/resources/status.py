@@ -31,7 +31,7 @@ class StatusResource(Resource):
         status = Supervisor.status()
         return reply_success(msg=msg, **status)
 
-    # @auth
+    @auth
     @requires_body
     def post(self):
         '''
@@ -50,7 +50,7 @@ class StatusResource(Resource):
             return reply_success(msg=msg, **status)
         return reply_empty()
 
-    # @auth
+    @auth
     def put(self):
         '''
         releases any waiting tasks to the queue for processing
