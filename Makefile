@@ -35,13 +35,19 @@ install: clean
 	pip install -e .
 
 reset-db:
-	@echo "//	db-reset"
+	@echo "//	reset-db"
 	@echo "//		Drop current database(s) and reset migrations"
 	rm -rf migrations/
 	psql -c "DROP DATABASE $(DATABASE)";
 	psql -c "DROP DATABASE $(TEST_DATABASE)";
+
+init-db:
+	@echo "//	init-db"
+	@echo "//		Create required databases and run migrations"
 	psql -c "CREATE DATABASE $(DATABASE)";
 	psql -c "CREATE DATABASE $(TEST_DATABASE)";
 	$(ENTRYPOINT) db init
 	$(ENTRYPOINT) db migrate
 	$(ENTRYPOINT) db upgrade
+
+database: reset-db init-db
