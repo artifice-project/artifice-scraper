@@ -1,7 +1,6 @@
 language: python
 
 python:
-  - "3.5"
   - "3.6"
   - "3.7-dev"
   - "3.8-dev"
@@ -24,8 +23,8 @@ before_script:
 script:
   - artifice.scraper test
 
-# after_success:
-#   - codecov
+after_success:
+  - codecov
 
 # after_failure:
 # after_script:
