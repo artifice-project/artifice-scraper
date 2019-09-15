@@ -1,21 +1,32 @@
 language: python
+
 python:
   - "3.5"
   - "3.6"
   - "3.7-dev"
   - "3.8-dev"
   - "nightly"
+
 addons:
   postgresql: "9.4"
+
 install:
   - pip install -r requirements.txt
   - pip install .
-services: postgresql
+
+services:
+  - postgresql
+
 before_script:
   - psql -c 'create database artifice_scraper_test;' -U postgres
   - psql -c 'create database artifice_scraper;' -U postgres
-script: artifice.scraper test
-# after_success
+
+script:
+  - artifice.scraper test
+
+# after_success:
+#   - codecov
+
 # after_failure:
 # after_script:
 # before_deploy
