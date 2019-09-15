@@ -23,7 +23,7 @@ def create_app(config_file=None, settings_override=None):
         app.config.update(settings_override)
 
     init_app(app)
-    setup_logging(app)
+    configure_logger(app)
 
     return app
 
@@ -40,14 +40,24 @@ def init_app(app):
     ma.init_app(app)
 
 
-def setup_logging(app):
-    if not app.debug:
-        import logging
-        from logging import FileHandler
-        log_file = app.config.get('LOG_FILE', 'flask.log')
-        handler = FileHandler(log_file)
-        handler.setLevel(app.config.get('LOG_LEVEL', 'INFO'))
-        app.logger.addHandler(handler)
+def configure_logger(app):
+    import sys
+    import logging
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handlers = []
+    if app.config.get('LOG_FILE'):
+        file_handler = logging.FileHandler(filename=app.config['LOG_FILE'], mode='a')
+        file_handler.setFormatter(formatter)
+        handlers.append(file_handler)
+    if app.debug:
+        stream_handler = logging.StreamHandler(stream=sys.stdout)
+        stream_handler.setFormatter(formatter)
+        handlers.append(stream_handler)
+    logging.basicConfig(
+        datefmt='%m/%d/%Y %I:%M:%S %p',
+        level=getattr(logging, app.config.get('LOG_LEVEL', 'INFO')),
+        handlers=handlers
+    )
 
 
 def create_celery_app(app=None):
