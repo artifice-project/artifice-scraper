@@ -1,5 +1,4 @@
 import os
-
 from celery import Celery
 from flask import Flask
 
@@ -12,6 +11,11 @@ os.environ.setdefault(config_variable_name, default_config_path)
 
 
 def create_app(config_file=None, settings_override=None):
+    '''
+    Application factory for the Flask components.
+    Extension initializations are performed via init_app()
+    This is the function called via the `wsgi.py` module.
+    '''
     app = Flask(__name__)
 
     if config_file:
@@ -29,10 +33,11 @@ def create_app(config_file=None, settings_override=None):
 
 
 def init_app(app):
-    # avoid contextual errors by importing all modules atomically
-    from artifice.scraper.models import db
+    '''
+    Initializes extentions. Pay attention to import order.
+    '''
+    from artifice.scraper.models import db, migrate
     db.init_app(app)
-    from artifice.scraper.models import migrate
     migrate.init_app(app, db)
     from artifice.scraper.resources import api
     api.init_app(app)
@@ -41,6 +46,10 @@ def init_app(app):
 
 
 def configure_logger(app):
+    '''
+    Configure the log handling for the Flask app.
+    Celery logging is handled via artifice.scraper.tasks.run_celery()
+    '''
     import sys
     import logging
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -61,6 +70,10 @@ def configure_logger(app):
 
 
 def create_celery_app(app=None):
+    '''
+    Application factory for the Celery components.
+    Workers are started via artifice.scraper.tasks.run_celery()
+    '''
     app = app or create_app()
     celery = Celery(
         app.name,
@@ -72,6 +85,9 @@ def create_celery_app(app=None):
     TaskBase = celery.Task
 
     class ContextTask(TaskBase):
+        '''
+        Generic class which allows called tasks to be bound to app context.
+        '''
         abstract = True
 
         def __call__(self, *args, **kwargs):
