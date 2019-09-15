@@ -4,7 +4,7 @@ from artifice.scraper.config.constants import *
 
 ENV = 'production'
 DEBUG = False
-# LOG_LEVEL = 'INFO'
+LOG_LEVEL = 'INFO'
 JSONIFY_PRETTYPRINT_REGULAR = True
 SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
 SQLALCHEMY_TRACK_MODIFICATIONS = False
