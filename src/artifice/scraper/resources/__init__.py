@@ -7,7 +7,8 @@ from .status import StatusResource
 from .metrics import MetricsResource
 from .content import ContentResource
 from .queue import QueueResource
-from .beta import BetaResource
+from .echo import EchoResource
+
 
 api.add_resource(IndexResource,     '/')
 api.add_resource(HealthResource,    '/health')
@@ -16,5 +17,5 @@ api.add_resource(StatusResource,    '/status')
 api.add_resource(MetricsResource,   '/metrics')
 api.add_resource(ContentResource,   '/content')
 api.add_resource(QueueResource,     '/queue')
-api.add_resource(BetaResource,      '/beta')
+api.add_resource(EchoResource,      '/echo')
 api.add_resource(DocumentsResource, '/documents/<int:document_id>', '/documents')

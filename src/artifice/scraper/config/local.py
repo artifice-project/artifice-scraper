@@ -3,7 +3,9 @@ from artifice.scraper.config.constants import *
 
 ENV = 'development'
 DEBUG = True
+PORT = 5000
 LOG_LEVEL = 'DEBUG'
+AUTH_TOKEN = 'correcthorsebatterystaple'
 JSONIFY_PRETTYPRINT_REGULAR = True
 SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/artifice_scraper'
 SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -22,5 +24,8 @@ CELERYBEAT_SCHEDULE = {
         'args': ()
     },
 }
+URL_FOR_STATUS = 'http://{0}:{1}/status'.format(HOST, PORT)
+URL_FOR_QUEUE = 'http://{0}:{1}/queue'.format(HOST, PORT)
+URL_FOR_CONTENT = 'http://{0}:{1}/content'.format(HOST, PORT)
 
 ERROR_404_HELP = False

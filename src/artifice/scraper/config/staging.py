@@ -7,6 +7,7 @@ ENV = 'production'
 DEBUG = False
 LOG_LEVEL = 'INFO'
 LOG_FILE = 'flask.log'
+AUTH_TOKEN = os.environ['AUTH_TOKEN']
 JSONIFY_PRETTYPRINT_REGULAR = True
 SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
 SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -25,5 +26,8 @@ CELERYBEAT_SCHEDULE = {
         'args': ()
     },
 }
+URL_FOR_STATUS = 'http://{0}/status'.format(HOST)
+URL_FOR_QUEUE = 'http://{0}/queue'.format(HOST)
+URL_FOR_CONTENT = 'http://{0}/content'.format(HOST)
 
 ERROR_404_HELP = False

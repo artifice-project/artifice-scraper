@@ -6,8 +6,15 @@ from .util import report_done, report_ready
 from artifice.scraper.supervisor import Supervisor
 from artifice.scraper.parsers import NPRParser
 
+
 URL_FOR_QUEUE = celery_app._preconf.get('URL_FOR_QUEUE')
 URL_FOR_CONTENT = celery_app._preconf.get('URL_FOR_CONTENT')
+
+
+def auth_header():
+    key = 'AUTH_TOKEN'
+    token = celery_app._preconf.get(key)
+    return {key: token}
 
 
 @celery_app.task(name='tasks.holding_tank')
@@ -59,7 +66,7 @@ def archive_content(content, **kwargs):
     Stores the extracted content to the database via
     API endpoint.
     '''
-    response = requests.post(URL_FOR_CONTENT, json=content)
+    response = requests.post(URL_FOR_CONTENT, headers=auth_header(), json=content)
     fb = feed_back(content)
     url = content.get('origin')
     return archive_url(report_done(url), status_code=response.status_code, feedback=fb, **kwargs)
@@ -71,7 +78,7 @@ def archive_url(json_data, **kwargs):
     Returns the URL to the database via API endpoint,
     status can be either `READY` or `DONE`.
     '''
-    response = requests.put(URL_FOR_QUEUE, json=json_data)
+    response = requests.put(URL_FOR_QUEUE, headers=auth_header(), json=json_data)
     return response.status_code, {**kwargs}
 
 
@@ -82,5 +89,5 @@ def feed_back(content):
     to the API queue endpoint, perpetuating the process.
     '''
     json_data = dict(url=content.get('url'))
-    response = requests.post(URL_FOR_QUEUE, json=json_data)
+    response = requests.post(URL_FOR_QUEUE, headers=auth_header(), json=json_data)
     return response.status_code
