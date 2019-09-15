@@ -1,6 +1,7 @@
 # Artifice Scraper
 
-[![Build Status](https://travis-ci.org/minelminel/flask-boilerplate.svg?branch=master)](https://travis-ci.org/minelminel/flask-boilerplate)
+[![Build Status](https://travis-ci.org/artifice-project/artifice-scraper.svg?branch=master)](https://travis-ci.org/artifice-project/artifice-scraper)
+[![codecov](https://codecov.io/gh/artifice-project/artifice-scraper/branch/master/graph/badge.svg)](https://codecov.io/gh/artifice-project/artifice-scraper)
 
 ## Installation
 
