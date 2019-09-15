@@ -3,6 +3,7 @@ from artifice.scraper.config.constants import *
 
 ENV = 'development'
 DEBUG = True
+PORT = 8000
 LOG_LEVEL = 'DEBUG'
 JSONIFY_PRETTYPRINT_REGULAR = True
 SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/artifice_scraper'
