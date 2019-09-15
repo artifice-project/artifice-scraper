@@ -25,5 +25,5 @@ class IndexResource(Resource):
 
 
     def get(self):
-        routes = self.routes_command()
+        routes = self.routes_command(sort='rule')
         return reply_success(routes)

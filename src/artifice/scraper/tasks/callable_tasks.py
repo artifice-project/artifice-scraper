@@ -16,6 +16,11 @@ def auth_header():
     token = celery_app._preconf.get(key)
     return {key: token}
 
+def unit_is_under_test():
+    key = 'testing'
+    is_testing = celery_app._preconf.get(key)
+    return is_testing
+
 
 @celery_app.task(name='tasks.holding_tank')
 def holding_tank(url, **kwargs):
@@ -23,6 +28,8 @@ def holding_tank(url, **kwargs):
     Entrypoint for the Celery queue. Automatically
     executes functions based on application config.
     '''
+    if unit_is_under_test():
+        return
     return sorting_hat(url, **kwargs)
 
 

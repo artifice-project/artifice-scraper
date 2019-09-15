@@ -23,6 +23,7 @@ def test_staging_config():
         {
             'SQLALCHEMY_DATABASE_URI': 'sqlite:///',
             'CELERY_BROKER_URL': 'sqlite:///',
+            'AUTH_TOKEN': 'secretaccesstoken',
         }
     )
     k.start()
