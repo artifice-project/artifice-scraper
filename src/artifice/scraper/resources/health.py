@@ -3,7 +3,11 @@ from flask import request, jsonify
 from flask_restful import Resource
 
 from artifice.etc.banners import artifice_version
-from artifice.scraper.utils import git_sha, time_of_deployment
+from artifice.scraper.utils import (
+    git_sha,
+    time_of_deployment,
+    is_service_running,
+)
 
 
 class HealthResource(Resource):
@@ -18,9 +22,11 @@ class HealthResource(Resource):
         env = current_app.config.get('ENV')
         std = time_of_deployment()
         ver = artifice_version()
+        cel = is_service_running('celery')
         return jsonify(
             commit=sha,
             deployed=std,
             environment=env,
             version=ver,
+            celery=cel,
         )

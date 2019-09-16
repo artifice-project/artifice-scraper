@@ -18,5 +18,9 @@ from .replies import (
     reply_conflict,
     reply_unauthorized,
 )
-from .system import number_of_cores, time_of_deployment
+from .system import (
+    number_of_cores,
+    time_of_deployment,
+    is_service_running,
+)
 from .tasking import send_to_celery
