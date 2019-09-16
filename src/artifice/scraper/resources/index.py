@@ -10,10 +10,15 @@ class IndexResource(Resource):
 
     @staticmethod
     def routes_command(sort='rule', all_methods=False):
+        '''
+        utilizes Flask's built-in rule mapper to generate a
+        site-map of the application, displaying:
+            'rule'      :   repr(Resource)
+            'methods'   :   list
+            'endpoint'  :   /path
+        '''
         reply = []
         rules = list(current_app.url_map.iter_rules())
-        if not rules:
-            return reply
         ignored_methods = set(() if all_methods else ('HEAD', 'OPTIONS'))
         if sort in ('endpoint', 'rule'):
             rules = sorted(rules, key=attrgetter(sort))

@@ -11,6 +11,13 @@ def test_get_returns_empty_queue(client, session):
     assert 'reply' in response.json.keys()
 
 
+def test_post_data_raises_error_queue(client, session):
+    bad_data = {'url': False, 'ahhhh': 'hHHhHHhHhH'}
+    response = client.post(endpoint, json=bad_data)
+
+    assert response.status_code == 422
+
+
 def test_post_returns_single_item_queue(client, session):
     url = 'http://www.google.com'
     json_data = dict(url=url)
