@@ -8,6 +8,7 @@ from .replies import (
 )
 from .general import validate_auth
 
+
 # @requires_body
 def requires_body(f):
     @wraps(f)

@@ -7,7 +7,7 @@ from artifice.scraper.utils import force_json, auth
 
 class ConfigResource(Resource):
 
-    @auth
+    # @auth
     def get(self):
         cfg = current_app.config
         msg = force_json(cfg)

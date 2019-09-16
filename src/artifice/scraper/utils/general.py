@@ -7,7 +7,10 @@ def cmp_dict(before, after):
 
 
 def validate_auth(request):
+    import logging
     from flask import request, current_app
+    log = logging.getLogger(__name__)
+
     if current_app.config.get('DEBUG'):
         return True
     client_token = request.headers.get('AUTH_TOKEN')
@@ -15,6 +18,7 @@ def validate_auth(request):
         return False
     server_token = current_app.config.get('AUTH_TOKEN')
     if client_token != server_token:
+        log.info(' * VALIDATION: MISMATCH (client:`{0}` != server:`{1}`)'.format(client_token, server_token))
         return False
     return True
 
