@@ -11,8 +11,8 @@ def test_get_metrics_returns_count(client, session):
 
     body = response.json
 
-    assert body.get('queue')['total'] == 0
-    assert body.get('queue')['READY'] == 0
-    assert body.get('queue')['TASKED'] == 0
-    assert body.get('queue')['DONE'] == 0
-    assert body.get('content')['total'] == 0
+    assert type(body.get('queue')['total']) is int
+    assert type(body.get('queue')['READY']) is int
+    assert type(body.get('queue')['TASKED']) is int
+    assert type(body.get('queue')['DONE']) is int
+    assert type(body.get('content')['total']) is int

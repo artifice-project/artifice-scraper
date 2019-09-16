@@ -7,6 +7,13 @@ from artifice.scraper.utils import reply_success
 
 log = logging.getLogger(__name__)
 
+def echo_request(request):
+    data = request.get_json()
+    args = request.args
+    headers = dict(request.headers)
+    response = dict(data=data, args=args, headers=headers)
+    return response
+
 
 class EchoResource(Resource):
 
@@ -14,10 +21,7 @@ class EchoResource(Resource):
         '''
         Returns values as they are received
         '''
-        data = request.get_json()
-        args = request.args
-        headers = dict(request.headers)
-        response = dict(data=data, args=args, headers=headers)
+        response = echo_request(request)
         log.debug(response)
         return reply_success(**response)
 
@@ -25,9 +29,6 @@ class EchoResource(Resource):
         '''
         Returns values as they are received
         '''
-        data = request.get_json()
-        args = request.args
-        headers = dict(request.headers)
-        response = dict(data=data, args=args, headers=headers)
+        response = echo_request(request)
         log.debug(response)
         return reply_success(**response)

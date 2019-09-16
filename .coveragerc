@@ -9,6 +9,11 @@ parallel = true
 source =
   artifice
   tests
+omit =
+  */config/local.py
+  */core/manage.py
+  */core/commands.py
+  */__main__.py
 
 [report]
 show_missing = true
