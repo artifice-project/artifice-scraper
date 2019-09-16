@@ -3,6 +3,7 @@ import requests
 
 from .base import celery_app
 from .util import report_done, report_ready
+from artifice.scraper.utils import headify
 from artifice.scraper.supervisor import Supervisor
 from artifice.scraper.parsers import NPRParser
 
@@ -14,7 +15,8 @@ URL_FOR_CONTENT = celery_app._preconf.get('URL_FOR_CONTENT')
 def auth_header():
     key = 'AUTH_TOKEN'
     token = celery_app._preconf.get(key)
-    return {key: token}
+    return {headify(key): token}
+
 
 def unit_is_under_test():
     key = 'testing'
