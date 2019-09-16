@@ -15,7 +15,7 @@ def test_get_should_return_status(client, session):
 def test_post_missing_body_status(client, session):
     response = client.post(endpoint)
 
-    assert response.status_code == 422
+    assert response.status_code == 400
     assert 'error' in response.json
 
 

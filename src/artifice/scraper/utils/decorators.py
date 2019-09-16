@@ -3,7 +3,7 @@ from flask import request
 from functools import wraps
 
 from .replies import (
-    reply_error,
+    reply_empty,
     reply_unauthorized
 )
 from .general import validate_auth
@@ -14,7 +14,7 @@ def requires_body(f):
     @wraps(f)
     def wrap(*args, **kwargs):
         if not request.data:
-            return reply_error(error='Request body cannot be empty')
+            return reply_empty(error='Request body cannot be empty')
         else:
             return f(*args, **kwargs)
     return wrap

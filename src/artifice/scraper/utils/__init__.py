@@ -14,10 +14,9 @@ from .decorators import (
 from .replies import (
     reply_success,
     reply_error,
+    reply_empty,
     reply_conflict,
     reply_unauthorized,
-    reply_empty,
-    reply_auto,
 )
 from .system import number_of_cores, time_of_deployment
 from .tasking import send_to_celery

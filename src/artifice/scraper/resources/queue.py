@@ -81,9 +81,9 @@ class QueueResource(Resource):
             return reply_error(errors)
         elif data:
             log.debug(' * RETURNING {0}'.format(queue_schema.dump(data)))
-            result = db.session.query(Queue).filter_by(url=data['url']).first()
+            result = db.session.query(Queue).filter_by(url=data.url).first()
             if result:
-                result.status = data['status']
+                result.status = data.status
             else:
                 log.error(' * UNEXPECTED {0}'.format(queue_schema.dump(data)))
                 db.session.add(data)
