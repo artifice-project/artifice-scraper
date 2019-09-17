@@ -13,6 +13,8 @@ omit =
   */config/local.py
   */core/manage.py
   */core/commands.py
+  */document.py
+  */test_api_documents.py
   */__main__.py
   */tasks/*
 
