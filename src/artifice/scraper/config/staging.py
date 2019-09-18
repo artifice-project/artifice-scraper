@@ -6,7 +6,7 @@ from artifice.scraper.config.constants import *
 ENV = 'production'
 DEBUG = False
 LOG_LEVEL = 'INFO'
-LOG_FILE = 'flask.log'
+LOG_FILE = '/var/log/artifice-scraper/flask.log'
 AUTH_TOKEN = os.environ['AUTH_TOKEN']
 JSONIFY_PRETTYPRINT_REGULAR = True
 SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
@@ -14,7 +14,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
 CELERY_BACKEND = 'rpc://'
 CELERY_WORKERS = number_of_cores()
-CELERY_LOG_FILE = 'celery.log'
+CELERY_LOG_FILE = '/var/log/artifice-scraper/celery.log'
 CELERY_LOG_LEVEL = 'INFO'
 CELERY_INCLUDE = ['artifice.scraper.tasks']
 CELERY_TASK_SERIALIZER = 'json'
