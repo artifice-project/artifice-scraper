@@ -22,11 +22,13 @@ class HealthResource(Resource):
         env = current_app.config.get('ENV')
         std = time_of_deployment()
         ver = artifice_version()
-        cel = is_service_running('celeryd')
+        services = {
+            'celeryd': is_service_running('celeryd')
+        }
         return jsonify(
             commit=sha,
             deployed=std,
             environment=env,
             version=ver,
-            celery=cel,
+            services={**services},
         )
