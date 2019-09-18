@@ -6,7 +6,7 @@ from artifice.scraper.config.constants import *
 ENV = 'production'
 DEBUG = False
 LOG_LEVEL = 'INFO'
-LOG_FILE = '/var/log/flask/flask.log'
+LOG_FILE = '/home/ubuntu/log/flask/flask.log'
 AUTH_TOKEN = os.environ['AUTH_TOKEN']
 JSONIFY_PRETTYPRINT_REGULAR = True
 SQLALCHEMY_DATABASE_URI = os.environ['SQLALCHEMY_DATABASE_URI']
