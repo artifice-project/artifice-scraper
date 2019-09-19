@@ -1,7 +1,6 @@
 from .base import api
 from .index import IndexResource
 from .health import HealthResource
-# from .document import DocumentsResource
 from .config import ConfigResource
 from .status import StatusResource
 from .metrics import MetricsResource
@@ -18,4 +17,3 @@ api.add_resource(MetricsResource,   '/metrics')
 api.add_resource(ContentResource,   '/content')
 api.add_resource(QueueResource,     '/queue')
 api.add_resource(EchoResource,      '/echo')
-# api.add_resource(DocumentsResource, '/documents/<int:document_id>', '/documents')
