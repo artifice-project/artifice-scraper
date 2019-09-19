@@ -43,6 +43,10 @@ def init_app(app):
     api.init_app(app)
     from artifice.scraper.schemas import ma
     ma.init_app(app)
+    if not app.testing:
+        import flask_monitoringdashboard as dashboard
+        # dashboard.config.init_from(file='../config/dashboard.cfg')
+        dashboard.bind(app)
 
 
 def configure_logger(app):
