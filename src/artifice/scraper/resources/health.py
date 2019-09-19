@@ -26,8 +26,7 @@ class HealthResource(Resource):
         systemctl = ['rabbitmq-server',
                     'celeryd',
                     'nginx',
-                    'postgresql',
-                    'gunicorn']
+                    'postgresql']
         services = {}
         for each in systemctl:
             services.update({each: is_service_running(each)})
