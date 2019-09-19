@@ -22,9 +22,16 @@ class HealthResource(Resource):
         env = current_app.config.get('ENV')
         std = time_of_deployment()
         ver = artifice_version()
-        services = {
-            'celeryd': is_service_running('celeryd')
-        }
+
+        systemctl = ['rabbitmq-server',
+                    'celeryd',
+                    'nginx',
+                    'postgresql',
+                    'gunicorn']
+        services = {}
+        for each in systemctl:
+            services.update({each: is_service_running(each)})
+
         return jsonify(
             commit=sha,
             deployed=std,
