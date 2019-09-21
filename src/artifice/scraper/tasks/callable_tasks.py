@@ -100,3 +100,18 @@ def feed_back(content):
     json_data = dict(url=content.get('url'))
     response = requests.post(URL_FOR_QUEUE, headers=auth_header(), json=json_data)
     return response.status_code
+
+
+# # # notifications & monitoring
+@celery_app.task(name='tasks.sms_notify')
+def sms_notify(body):
+    import os
+    from twilio.rest import Client
+
+    sid = os.environ['TWILIO_SID']
+    token = os.environ['TWILIO_TOKEN']
+    client = Client(sid, token)
+
+    from_ = os.environ['TWILIO_FROM_NUM']
+    to_ = os.environ['TWILIO_TO_NUM']
+    client.messages.create(to=to_, from_=from_, body=body)

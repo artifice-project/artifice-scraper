@@ -22,12 +22,12 @@ def health_check():
     change, that service is stored in Redis as having been notified.
     Once the service is restarted, the key-value store is reset.
     '''
-    # 1. check the status of the service, either by calling the is_running function
-    #   directly or by fetching the /health endpoint and parsing the result.
-    # 2. if service is not running, either 'unavailable' or 'stopped', then check
-    #   the cache to see if a notification regarding that service has already been sent.
-    # 3. if no notification has been sent, release the service and status to the send_message
-    #   task in a non-blocking manner.
-    # 4. if a notification has already been sent, no futher action should be taken.
-    # 5. 
-    pass
+    from artifice.scraper.redis import alert_if_service_stopped
+    services = ['celeryd', 'postgresql', 'rabbitmq-server', 'redis-server']
+    reply = []
+    for service in services:
+        tb = alert_if_service_stopped(service)
+        print({service: tb})
+        reply.append(tb)
+    # from .callable_tasks import sms_notify
+    # sms_notify(tb)

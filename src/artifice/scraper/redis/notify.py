@@ -22,3 +22,29 @@ Scenario 4:
     Action: This is the first detection of the stoppage. The key-value corresponding to the service should be set to True, and an SMS message sent to notify the webmaster of this change in state.
 '''
 from .base import redis_client
+from artifice.scraper.utils import is_service_running
+
+# service_list = ['celeryd', 'postgresql', 'rabbitmq-server', 'redis-server']
+
+
+def alert_if_service_stopped(service):
+    from flask import current_app
+    if current_app.env != 'production':
+        return
+    reply = []
+    key = 'SERVICE_ALERTED_{0}'.format(service)
+    reply.append({'key': key})
+
+    if is_service_running(service) != 'running':
+        alert_sent = redis_client.get(key)
+        reply.append({'alert_sent': alert_sent})
+        if alert_sent:
+            pass
+        else:
+            reply.append(' * THIS IS WHERE WE WOULD SENT A MESSAGE')
+            # async_task.delay(service)
+            redis_client.set(key, 1)
+    else:
+        redis_client.set(key, None)
+        reply.append(' * no further action')
+    # except redis.exceptions.ConnectionError as e:

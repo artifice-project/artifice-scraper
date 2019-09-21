@@ -23,6 +23,11 @@ CELERYBEAT_SCHEDULE = {
         'schedule': timedelta(seconds=10),
         'args': ()
     },
+    'scheduled_tasks1': {
+        'task': 'tasks.health_check',
+        'schedule': timedelta(seconds=20),
+        'args': ()
+    },
 }
 URL_FOR_STATUS = 'http://{0}:{1}/status'.format(HOST, PORT)
 URL_FOR_QUEUE = 'http://{0}:{1}/queue'.format(HOST, PORT)
