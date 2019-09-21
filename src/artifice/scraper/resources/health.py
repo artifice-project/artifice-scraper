@@ -25,7 +25,7 @@ class HealthResource(Resource):
 
         systemctl = ['rabbitmq-server',
                     'celeryd',
-                    'nginx',
+                    'redis-server',
                     'postgresql']
         services = {}
         for each in systemctl:
