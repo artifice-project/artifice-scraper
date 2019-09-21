@@ -41,7 +41,4 @@ class MetricsResource(Resource):
         '''
         q = self.queue_metrics()
         c = self.content_metrics()
-        # get uptime
-        # get request count total
-        # calculate requests per minute
         return reply_success(queue=q, content=c)
