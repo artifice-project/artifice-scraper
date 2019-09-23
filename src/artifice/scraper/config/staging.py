@@ -6,6 +6,7 @@ from artifice.scraper.config.constants import *
 ENV = 'production'
 DEBUG = False
 LOG_LEVEL = 'INFO'
+HOST = 'http://127.0.0.1'
 # LOG_FILE = '/home/ubuntu/log/flask/flask.log'
 LOG_FILE = os.environ['LOG_FILE']
 AUTH_TOKEN = os.environ['AUTH_TOKEN']
@@ -26,9 +27,14 @@ CELERYBEAT_SCHEDULE = {
         'schedule': timedelta(minutes=2),
         'args': ()
     },
+    'scheduled_tasks1': {
+        'task': 'tasks.health_check',
+        'schedule': timedelta(seconds=30),
+        'args': ()
+    },
 }
-URL_FOR_STATUS = 'http://{0}/status'.format(HOST)
-URL_FOR_QUEUE = 'http://{0}/queue'.format(HOST)
-URL_FOR_CONTENT = 'http://{0}/content'.format(HOST)
+URL_FOR_STATUS = '{0}/status'.format(HOST)
+URL_FOR_QUEUE = '{0}/queue'.format(HOST)
+URL_FOR_CONTENT = '{0}/content'.format(HOST)
 
 ERROR_404_HELP = False

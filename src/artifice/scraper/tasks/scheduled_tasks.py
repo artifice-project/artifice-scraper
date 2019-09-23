@@ -22,12 +22,20 @@ def health_check():
     change, that service is stored in Redis as having been notified.
     Once the service is restarted, the key-value store is reset.
     '''
-    from artifice.scraper.redis import alert_if_service_stopped
-    services = ['celeryd', 'postgresql', 'rabbitmq-server', 'redis-server']
+    from artifice.scraper.redis import internal_get_request, check_if_should_alert
+    data = internal_get_request('health')
+    services = data.get('services')
     reply = []
-    for service in services:
-        tb = alert_if_service_stopped(service)
-        print({service: tb})
-        reply.append(tb)
-    # from .callable_tasks import sms_notify
-    # sms_notify(tb)
+
+    for service, status in services.items():
+        tb = check_if_should_alert(service, status)
+        if tb:
+            reply.append(tb)
+    if not reply:
+        return
+
+    from artifice.scraper.redis import create_msg_body
+    body = create_msg_body(reply)
+
+    from .callable_tasks import sms_notify
+    sms_notify.delay(body)

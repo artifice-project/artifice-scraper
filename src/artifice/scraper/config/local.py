@@ -4,6 +4,7 @@ from artifice.scraper.config.constants import *
 ENV = 'development'
 DEBUG = True
 PORT = 5000
+HOST = 'http://127.0.0.1:{0}'.format(PORT)
 LOG_LEVEL = 'DEBUG'
 AUTH_TOKEN = 'correcthorsebatterystaple'
 JSONIFY_PRETTYPRINT_REGULAR = True
@@ -29,8 +30,8 @@ CELERYBEAT_SCHEDULE = {
         'args': ()
     },
 }
-URL_FOR_STATUS = 'http://{0}:{1}/status'.format(HOST, PORT)
-URL_FOR_QUEUE = 'http://{0}:{1}/queue'.format(HOST, PORT)
-URL_FOR_CONTENT = 'http://{0}:{1}/content'.format(HOST, PORT)
+URL_FOR_STATUS = '{0}/status'.format(HOST)
+URL_FOR_QUEUE = '{0}/queue'.format(HOST)
+URL_FOR_CONTENT = '{0}/content'.format(HOST)
 
 ERROR_404_HELP = False
