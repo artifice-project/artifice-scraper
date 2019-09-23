@@ -22,12 +22,20 @@ def health_check():
     change, that service is stored in Redis as having been notified.
     Once the service is restarted, the key-value store is reset.
     '''
-    # 1. check the status of the service, either by calling the is_running function
-    #   directly or by fetching the /health endpoint and parsing the result.
-    # 2. if service is not running, either 'unavailable' or 'stopped', then check
-    #   the cache to see if a notification regarding that service has already been sent.
-    # 3. if no notification has been sent, release the service and status to the send_message
-    #   task in a non-blocking manner.
-    # 4. if a notification has already been sent, no futher action should be taken.
-    # 5. 
-    pass
+    from artifice.scraper.redis import internal_get_request, check_if_should_alert
+    data = internal_get_request('health')
+    services = data.get('services')
+    reply = []
+
+    for service, status in services.items():
+        tb = check_if_should_alert(service, status)
+        if tb:
+            reply.append(tb)
+    if not reply:
+        return
+
+    from artifice.scraper.redis import create_msg_body
+    body = create_msg_body(reply)
+
+    from .callable_tasks import sms_notify
+    sms_notify.delay(body)

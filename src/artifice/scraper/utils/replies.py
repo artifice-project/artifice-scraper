@@ -18,3 +18,9 @@ def reply_unauthorized(*args, **kwargs):
 
 def reply_empty(*args, **kwargs):
     return make_response(jsonify(*args, **kwargs), 400)
+
+
+import werkzeug
+class NotFound(werkzeug.exceptions.HTTPException):
+    code = 404
+    data = {}
