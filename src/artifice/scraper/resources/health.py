@@ -23,8 +23,7 @@ class HealthResource(Resource):
         std = time_of_deployment()
         ver = artifice_version()
 
-        systemctl = ['rabbitmq-server',
-                    'celeryd',
+        systemctl = ['celeryd',
                     'redis-server',
                     'postgresql']
         services = {}
