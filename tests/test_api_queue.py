@@ -63,4 +63,4 @@ def test_post_empty_raises_error_queue(client, session):
 def test_get_returns_specific_queue(client, session):
     response = client.get(endpoint + '/1')
 
-    assert response.status_code == 404
+    assert response.status_code == 200

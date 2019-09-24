@@ -40,4 +40,4 @@ def test_post_returns_error_content(client, session):
 def test_get_returns_specific_content(client, session):
     response = client.get(endpoint + '/1')
 
-    assert response.status_code == 404
+    assert response.status_code == 200
