@@ -1,6 +1,6 @@
 import logging
 from flask import current_app
-from flask import request
+from flask import request, abort
 from flask_restful import Resource
 
 from artifice.scraper.models import db, Queue
@@ -26,16 +26,29 @@ log = logging.getLogger(__name__)
 
 class QueueResource(Resource):
 
-    def get(self):
+    def get(self, _id=None):
         '''
         show all url entries from the database
         '''
+        if _id:
+            return self.get_one(_id)
         args, _ = queue_args_schema.dump(request.get_json())
         result = db.session.query(Queue).filter(Queue.status.in_( \
                     args.get('status'))).limit( \
                     args.get('limit')).all()
         data, _ = queues_schema.dump(result)
         return reply_success(msg=args, reply=data)
+
+    def get_one(self, _id):
+        '''
+        displays a specific content result by database ID.
+        if no such entry exists, a 404 error is raised.
+        '''
+        result = db.session.query(Queue).filter_by(id=_id).first()
+        if not result:
+            abort(404)
+        data, _ = queue_schema.dump(result)
+        return reply_success(data)
 
     @auth
     @requires_body

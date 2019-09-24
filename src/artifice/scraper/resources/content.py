@@ -1,6 +1,6 @@
 import logging
 from flask import current_app
-from flask import request
+from flask import request, abort
 from flask_restful import Resource
 
 from artifice.scraper.models import db, Content
@@ -23,15 +23,29 @@ log = logging.getLogger(__name__)
 
 class ContentResource(Resource):
 
-    def get(self):
+    def get(self, _id=None):
         '''
         displays the stored content from the database
+        uses request body to provide query args
         '''
+        if _id:
+            return self.get_one(_id)
         args, _ = args_schema.dump(request.get_json())
         result = db.session.query(Content).limit( \
                     args.get('limit')).all()
         data, _ = contents_schema.dump(result)
         return reply_success(msg=args, reply=data)
+
+    def get_one(self, _id):
+        '''
+        displays a specific content result by database ID.
+        if no such entry exists, a 404 error is raised.
+        '''
+        result = db.session.query(Content).filter_by(id=_id).first()
+        if not result:
+            abort(404)
+        data, _ = content_schema.dump(result)
+        return reply_success(data)
 
     @auth
     @requires_body
