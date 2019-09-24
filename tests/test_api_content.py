@@ -35,3 +35,9 @@ def test_post_returns_error_content(client, session):
     response = client.post(endpoint, json=json_data)
 
     assert response.status_code == 422
+
+
+def test_get_returns_specific_content(client, session):
+    response = client.get(endpoint + '/1')
+
+    assert response.status_code == 404
