@@ -29,7 +29,7 @@ CELERYBEAT_SCHEDULE = {
     },
     'scheduled_tasks1': {
         'task': 'tasks.health_check',
-        'schedule': timedelta(seconds=30),
+        'schedule': timedelta(minutes=5),
         'args': ()
     },
 }
