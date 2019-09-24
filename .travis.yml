@@ -9,7 +9,7 @@ python:
   # - "nightly"
 
 addons:
-  postgresql: "10.10"
+  postgresql: "9.4"
 
 install:
   - pip install -r requirements.txt
