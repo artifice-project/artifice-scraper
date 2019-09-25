@@ -24,11 +24,10 @@ class NPRParser(BaseParser):
         return keep
 
     def _extract_title(self):
-        if self.soup.title:
-            try:
-                return str(self.soup.title.text)
-            except:
-                return ''
+        try:
+            return str(self.soup.title.text)
+        except:
+            return ''
 
     def _extract_text(self):
         p_tags = [e.get_text() for e in self.soup.find_all('p', {})]

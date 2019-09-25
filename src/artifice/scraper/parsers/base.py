@@ -2,9 +2,6 @@ from abc import ABC, abstractmethod
 
 class BaseParser(ABC):
 
-    def __init__(self, *args):
-        raise NotImplementedError()
-
     @staticmethod
     def _strain_links():
         raise NotImplementedError()

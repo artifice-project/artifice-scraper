@@ -26,7 +26,7 @@ def create_app(config_file=None, settings_override=None):
         config_source = os.environ[config_variable_name]
 
     from artifice.etc import terminal_output
-    terminal_output('Config Source: {0}'.format(config_source))
+    terminal_output('config_file:\t{0}'.format(config_source))
 
     if settings_override:
         app.config.update(settings_override)
