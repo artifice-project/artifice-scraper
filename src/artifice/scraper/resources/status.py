@@ -16,6 +16,7 @@ from artifice.scraper.models import db, Queue
 from artifice.scraper.schemas import (
     status_schema,
     queues_schema,
+    args_schema,
 )
 
 log = logging.getLogger(__name__)
@@ -55,7 +56,8 @@ class StatusResource(Resource):
         '''
         releases any waiting tasks to the queue for processing
         '''
-        result = db.session.query(Queue).filter_by(status='READY').all()
+        args, _ = args_schema.dump(request.get_json())
+        result = db.session.query(Queue).filter_by(status='READY').limit(args['limit']).all()
         for each in result:
             each.status = 'TASKED'
             if not Supervisor.status['debug']:
@@ -63,4 +65,4 @@ class StatusResource(Resource):
                 log.debug(' * RELEASED {}'.format(each.url))
         db.session.commit()
         reply = queues_schema.dump(result).data
-        return reply_success(reply)
+        return reply_success(msg=args, reply=reply)
