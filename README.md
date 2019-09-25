@@ -1,10 +1,10 @@
 # Artifice Scraper :scissors:
 
 [![Build Status](https://travis-ci.org/artifice-project/artifice-scraper.svg?branch=master)](https://travis-ci.org/artifice-project/artifice-scraper)
-[![Generic badge](https://img.shields.io/badge/yee-haw-<COLOR>.svg)](https://shields.io/)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b6d2a8127db3dd42e77e/maintainability)](https://codeclimate.com/github/artifice-project/artifice-scraper/maintainability)
 [![codecov](https://codecov.io/gh/artifice-project/artifice-scraper/branch/master/graph/badge.svg)](https://codecov.io/gh/artifice-project/artifice-scraper)
 [![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
+[![Deployment](https://img.shields.io/badge/deployment-ansible-blueviolet)](https://shields.io/)
 [![Python 3.6](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
 [![Python 3.7](https://img.shields.io/badge/python-3.7-blue.svg)](https://www.python.org/downloads/release/python-370/)
 <!-- [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/) -->
