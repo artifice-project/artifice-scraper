@@ -12,7 +12,7 @@ manager.add_option('-c', '--config', dest='config_file', required=False)
 manager.add_command('db', MigrateCommand)
 manager.add_command('test', PytestCommand)
 manager.add_command('coverage', CoverageCommand)
-manager.add_command('runserver', Server(port=5000))
+manager.add_command('runserver', Server(use_reloader=False))
 manager.add_command('runcelery', Command(run_celery))
 
 

@@ -26,7 +26,10 @@ def create_app(config_file=None, settings_override=None):
         config_source = os.environ[config_variable_name]
 
     from artifice.etc import terminal_output
-    terminal_output('config_file:\t{0}'.format(config_source))
+    from termcolor import colored
+    text = 'config_file:  {0}'.format(config_source)
+    color = 'magenta'
+    terminal_output(colored(text, color))
 
     if settings_override:
         app.config.update(settings_override)
@@ -53,8 +56,11 @@ def init_app(app):
     if not app.testing:
         import flask_monitoringdashboard as dashboard
         # dashboard.config.init_from(file='../config/dashboard.cfg')
-        # dashboard.bind(app)
+        dashboard.bind(app)
         # custom graphs...
+        from artifice.scraper.utils.graphs import size_of_foo
+        schedule = {'seconds': 30}
+        dashboard.add_graph('Foo', lambda: size_of_foo(), **schedule)
 
 
 def configure_logger(app):
