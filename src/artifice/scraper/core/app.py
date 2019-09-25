@@ -20,8 +20,13 @@ def create_app(config_file=None, settings_override=None):
 
     if config_file:
         app.config.from_pyfile(config_file)
+        config_source = config_file
     else:
         app.config.from_envvar(config_variable_name)
+        config_source = os.environ[config_variable_name]
+
+    from artifice.etc import terminal_output
+    terminal_output('Config Source: {0}'.format(config_source))
 
     if settings_override:
         app.config.update(settings_override)
