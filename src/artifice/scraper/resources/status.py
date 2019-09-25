@@ -60,9 +60,11 @@ class StatusResource(Resource):
         result = db.session.query(Queue).filter_by(status='READY').limit(args['limit']).all()
         for each in result:
             each.status = 'TASKED'
-            if not Supervisor.status['debug']:
+            if not Supervisor.status()['debug']:
                 send_to_celery(each.url)
                 log.debug(' * RELEASED {}'.format(each.url))
+            else:
+                log.debug(' * DEBUG {}'.format(each.url))
         db.session.commit()
         reply = queues_schema.dump(result).data
         return reply_success(msg=args, reply=reply)
