@@ -10,9 +10,10 @@ def test_get_metrics_returns_count(client, session):
     assert response.json
 
     body = response.json
+    database = body['database']
 
-    assert type(body.get('queue')['total']) is int
-    assert type(body.get('queue')['READY']) is int
-    assert type(body.get('queue')['TASKED']) is int
-    assert type(body.get('queue')['DONE']) is int
-    assert type(body.get('content')['total']) is int
+    assert type(database.get('queue')['total']) is int
+    assert type(database.get('queue')['READY']) is int
+    assert type(database.get('queue')['TASKED']) is int
+    assert type(database.get('queue')['DONE']) is int
+    assert type(database.get('content')['total']) is int
