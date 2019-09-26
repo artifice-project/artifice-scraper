@@ -10,7 +10,6 @@ from artifice.scraper.models import (
 )
 from artifice.scraper.utils import (
     reply_success,
-    # requests_per_minute,
 )
 from artifice.scraper.supervisor import Supervisor
 
@@ -34,6 +33,17 @@ class MetricsResource(Resource):
             total=db.session.query(Content).count(),
         )
 
+    @staticmethod
+    def idle_ratio(q):
+        done = q['DONE']
+        ready = q['READY']
+        tasked = q['TASKED']
+        try:
+            ratio = (tasked + ready) / done
+        except ZeroDivisionError:
+            ratio = 0
+        return round(ratio, 2)
+
     def get(self):
         '''
         displays statistics on database size, can also be used for
@@ -41,4 +51,7 @@ class MetricsResource(Resource):
         '''
         q = self.queue_metrics()
         c = self.content_metrics()
-        return reply_success(queue=q, content=c)
+        database = dict(queue=q, content=c)
+        i = self.idle_ratio(q)
+        ratio = dict(idle=i)
+        return reply_success(database=database, ratio=ratio)

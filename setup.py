@@ -36,7 +36,7 @@ https://github.com/artifice-project/artifice-scraper.git
 
 setup(
     name="Artifice",
-    version="1.5.0",
+    version="1.5.1",
     author=["@minelminel", "@liberty3000"],
     url="https://www.github.com/artifice-project/artifice-scraper",
     description="Simple web app for testing deployment tools",
