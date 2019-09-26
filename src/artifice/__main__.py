@@ -1,2 +1,4 @@
-from artifice.etc import welcome
-welcome()
+from artifice.etc.render import welcome
+
+if __name__ == '__main__':
+    welcome()
