@@ -22,3 +22,19 @@ def is_service_running(service):
     else:
         msg = 'unavailable'
     return msg
+
+
+def disk_space_percent(path='/'):
+    '''
+    Returns the amount of USED DISK SPACE on the given path.
+    Value is returned as a percentage, rounded to 1 decimal.
+    '''
+    import os
+    statvfs = os.statvfs(path)
+    total = statvfs.f_frsize * statvfs.f_blocks     # Size of filesystem in bytes
+    actual = statvfs.f_frsize * statvfs.f_bfree     # Actual number of free bytes
+    avail = statvfs.f_frsize * statvfs.f_bavail     # Number of free bytes that ordinary users
+                                                    # are allowed to use (excl. reserved space)
+    used = (total - avail) / total
+    as_percent = round(used * 100, 1)
+    return as_percent

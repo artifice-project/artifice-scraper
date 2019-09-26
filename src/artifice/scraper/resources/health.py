@@ -9,8 +9,37 @@ from artifice.scraper.utils import (
     is_service_running,
 )
 
+def percentify(arg):
+    # param: arg:   int, float, str
+    # returns: arg + '%'
+    return '{}%'.format(arg)
+
 
 class HealthResource(Resource):
+
+    @staticmethod
+    def systemctl(services):
+        systemctl = {}
+        for each in services:
+            systemctl.update({each: is_service_running(each)})
+        return systemctl
+
+    @staticmethod
+    def warnings():
+        return []
+
+    @staticmethod
+    def memory():
+        import psutil
+        from artifice.scraper.utils import disk_space_percent
+        cpu_used_pct = psutil.cpu_percent()
+        ram_used_pct = dict(psutil.virtual_memory()._asdict())['percent']
+        disk_used_pct = disk_space_percent(path='/')
+        return dict(
+            cpu=percentify(cpu_used_pct),
+            ram=percentify(ram_used_pct),
+            disk=percentify(disk_used_pct),
+        )
 
     def get(self):
         '''
@@ -19,21 +48,23 @@ class HealthResource(Resource):
         therefore no authentication is required to view.
         '''
         sha = git_sha()
-        env = current_app.config.get('ENV')
-        std = time_of_deployment()
+        tod = time_of_deployment()
+        env = current_app.config.get('ENV', '<None>')
+        mem = self.memory()
+        services = self.systemctl([
+                        'celeryd',
+                        'redis-server',
+                        'postgresql',
+                        ])
         ver = artifice_version()
-
-        systemctl = ['celeryd',
-                    'redis-server',
-                    'postgresql']
-        services = {}
-        for each in systemctl:
-            services.update({each: is_service_running(each)})
+        warns = self.warnings()
 
         return jsonify(
             commit=sha,
-            deployed=std,
+            deployed=tod,
             environment=env,
-            version=ver,
+            memory=mem,
             services={**services},
+            version=ver,
+            warnings=warns,
         )

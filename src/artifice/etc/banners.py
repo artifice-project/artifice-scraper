@@ -44,5 +44,4 @@ https://github.com/artifice-project/artifice-scraper
 def artifice_version(*args, **kwargs):
     import pkg_resources
     text = pkg_resources.get_distribution("Artifice").version
-    color = "magenta"
-    return colored(text, color)
+    return text
