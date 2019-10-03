@@ -1,8 +1,12 @@
+import re
 import os
 import os.path as osp
 from setuptools import setup, find_packages
 
 loc = os.path.dirname(os.path.abspath(__file__))
+
+with open(osp.join(loc, 'src', 'artifice', '__init__.py'), 'rt', encoding='utf8') as f:
+    version = re.search(r'__version__ = "(.*?)"', f.read()).group(1)
 
 with open(osp.join(loc, 'requirements.txt')) as f:
     required = f.read().splitlines()
@@ -36,10 +40,11 @@ https://github.com/artifice-project/artifice-scraper.git
 
 setup(
     name="Artifice",
-    version="1.5.1",
+    version=version,
     author=["@minelminel", "@liberty3000"],
+    author_email="theartificeproject@gmail.com",
     url="https://www.github.com/artifice-project/artifice-scraper",
-    description="Simple web app for testing deployment tools",
+    description="You Are What You See",
     long_description=description_text,
     install_requires=required,
     python_requires='>=3.5.*, <4',
