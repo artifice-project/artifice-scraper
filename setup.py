@@ -41,6 +41,7 @@ https://github.com/artifice-project/artifice-scraper.git
 setup(
     name="Artifice",
     version=version,
+    license="MIT",
     author=["@minelminel", "@liberty3000"],
     author_email="theartificeproject@gmail.com",
     url="https://www.github.com/artifice-project/artifice-scraper",
