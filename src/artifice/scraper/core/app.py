@@ -37,6 +37,16 @@ def create_app(config_file=None, settings_override=None):
     init_app(app)
     configure_logger(app)
 
+    @app.before_first_request
+    def do_before_first_request():
+        # Only executed once at app creation
+        import artifice.scraper.resources.before as b4
+
+    @app.before_request
+    def do_before_request():
+        # Called before EACH & EVERY REQUEST
+        import artifice.scraper.resources.before as b4
+
     return app
 
 
