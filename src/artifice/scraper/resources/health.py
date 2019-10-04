@@ -25,8 +25,24 @@ class HealthResource(Resource):
         return systemctl
 
     @staticmethod
-    def warnings():
-        return []
+    def warnings(mem):
+        '''
+        Displays written warning messages if system resource usage rises
+        above a predefined level. Right now this is just a simple workaround
+        that allows for searching the /health endpoint data's `warning` field
+        and feeding the information into a secondary source.
+        '''
+        msgs = []
+        threshold = dict(
+            cpu=75,
+            ram=75,
+            disk=75,
+        )
+        for key in threshold:
+            if float(mem.get(key).split('%')[0]) > threshold.get(key):
+                msg = '{} above threshold of {}%'.format(key.upper(), threshold.get(key))
+                msgs.append(msg)
+        return msgs
 
     @staticmethod
     def memory():
@@ -57,7 +73,7 @@ class HealthResource(Resource):
                         'postgresql',
                         ])
         ver = artifice_version()
-        warns = self.warnings()
+        warns = self.warnings(mem)
 
         return jsonify(
             commit=sha,
