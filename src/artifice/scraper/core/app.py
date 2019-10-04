@@ -53,9 +53,10 @@ def init_app(app):
     ma.init_app(app)
     from artifice.scraper.redis import redis_client
     redis_client.init_app(app)
-    if not app.testing:
+# if not app.testing:                               # dashboard in development
+    if not app.env in ('testing', 'development'): # dashboard in production only
         import flask_monitoringdashboard as dashboard
-        # dashboard.config.init_from(file='../config/dashboard.cfg')
+        # dashboard.config.init_from(file='../config/dashboard.cfg')    # OR, env var
         dashboard.bind(app)
         # custom graphs...
         from artifice.scraper.utils.graphs import size_of_foo

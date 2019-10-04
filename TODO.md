@@ -4,3 +4,7 @@
 - ability to disown/remove orphan tasks
 - respect robots.txt in parser
 - instantiate parser to load netloc and exclusion lists, and do parsing and extracting as class methods
+
+
+- move core services outside of ec2 instance
+- set up cronjob dumps of database content

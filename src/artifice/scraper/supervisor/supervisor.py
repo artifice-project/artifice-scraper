@@ -5,28 +5,32 @@ from artifice.scraper.utils import cmp_dict
 
 class Supervisor:
     '''
-    Pseudo-object for accessing and modifying app.config items.
-    Values are declared in config/constants.py and inherited by all config classes.
+    Pseudo-object for accessing and modifying app state items.
+    ENV development     ->  app.config, direct mutation
+    ENV production      ->  Redis key-value store
+    Default initial values are declared in config/constants.py
+        and should be inherited by all config classes, allowing overrides.
     Used in conjunction with the defined schemas, which perform validations.
 
     # get current status of supervisor values
     >>> Supervisor.status()
+    {
+      "debug": False,
+      "enabled": True,
+      "polite": 10
+    }
 
-        {
-          "debug": false,
-          "enabled": true,
-          "polite": 10
-        }
+    >>> Supervisor.status(key="debug")
+    False
 
 
     # pass validated data to modify with
     >>> data = schema.dump(request.get_json())
     >>> changed = Supervisor.handle_changes(data)
-
-        {
-        	"enabled": false,
-        	"polite": 6
-        }
+    {
+    	"enabled": false,
+    	"polite": 6
+    }
     # NOTE: if validation was performed correctly,
     #       `changed` should be identical to `data`
 
@@ -34,19 +38,22 @@ class Supervisor:
     # render the changes in a human-readable manner
     >>> changed = Supervisor.handle_changes(data)
     >>> msg = Supervisor.render_msg(changed)
-
-        [
-          "enabled ==> False",
-          "polite ==> 6"
-        ]
+    [
+      "enabled ==> False",
+      "polite ==> 6"
+    ]
     '''
 
     @classmethod
-    def status(cls):
+    def status(cls, key=None):
         _enabled = current_app.config.get('SUPERVISOR_ENABLED')
         _debug = current_app.config.get('SUPERVISOR_DEBUG')
         _polite = current_app.config.get('SUPERVISOR_POLITE')
-        return dict(enabled=_enabled, debug=_debug, polite=_polite)
+        _dict = dict(enabled=_enabled, debug=_debug, polite=_polite)
+        if not key:
+            return _dict
+        else:
+            return _dict.get(key)
 
     @classmethod
     def change(cls, key, desired, current=None):
