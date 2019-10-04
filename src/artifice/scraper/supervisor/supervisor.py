@@ -1,13 +1,16 @@
 from flask import current_app
 
+from artifice.scraper.redis import redis_client
 from artifice.scraper.utils import cmp_dict
 
 
 class Supervisor:
     '''
     Pseudo-object for accessing and modifying app state items.
+
     ENV development     ->  app.config, direct mutation
     ENV production      ->  Redis key-value store
+
     Default initial values are declared in config/constants.py
         and should be inherited by all config classes, allowing overrides.
     Used in conjunction with the defined schemas, which perform validations.
@@ -43,122 +46,55 @@ class Supervisor:
       "polite ==> 6"
     ]
     '''
+    def __init__(self):
+        pass
+
 
     @classmethod
     def status(cls, key=None):
-        _enabled = current_app.config.get('SUPERVISOR_ENABLED')
-        _debug = current_app.config.get('SUPERVISOR_DEBUG')
-        _polite = current_app.config.get('SUPERVISOR_POLITE')
+        '''
+        !! externally invoked method !!
+
+        Displays all global app state values, aware of environment.
+        By default, returns complete dict. Single values can be specifed.
+        '''
+        if current_app.env == 'production':
+            _enabled =  redis_client.get('SUPERVISOR_ENABLED')
+            _debug =    redis_client.get('SUPERVISOR_DEBUG')
+            _polite =   redis_client.get('SUPERVISOR_POLITE')
+        else:
+            _enabled =  current_app.config['SUPERVISOR_ENABLED']
+            _debug =    current_app.config['SUPERVISOR_DEBUG']
+            _polite =   current_app.config['SUPERVISOR_POLITE']
+
         _dict = dict(enabled=_enabled, debug=_debug, polite=_polite)
-        if not key:
-            return _dict
-        else:
+
+        if key:
             return _dict.get(key)
+        return _dict
 
-    @classmethod
-    def change(cls, key, desired, current=None):
-        '''
-        Function by which all current_app config values are modified.
-        Function returns `1` if value is was_changed, else `0`
-        Error raised if key is not an attribute of current_app.config
-        '''
-        if current is None:
-            current_app.config[key] = desired
-            was_changed = 1
-        elif current_app.config.get(key) is current:
-            current_app.config[key] = desired
-            was_changed = 1
-        elif current_app.config.get(key) is not current:
-            was_changed = 0
-        elif key not in current_app.config.keys():
-            raise KeyError('`{0}` not in app.config, unable to set as `{1}`'.format(key, desired))
-        return was_changed
-
-    @classmethod
-    def _enable(cls):
-        key = 'SUPERVISOR_ENABLED'
-        desired = True
-        current = False
-        was_changed = cls.change(key, desired, current)
-        return was_changed
-
-    @classmethod
-    def _disable(cls):
-        key = 'SUPERVISOR_ENABLED'
-        desired = False
-        current = True
-        was_changed = Supervisor.change(key, desired, current)
-        return was_changed
-
-    @staticmethod
-    def _debug_on():
-        key = 'SUPERVISOR_DEBUG'
-        desired = True
-        current = False
-        was_changed = Supervisor.change(key, desired, current)
-        return was_changed
-
-    @staticmethod
-    def _debug_off():
-        key = 'SUPERVISOR_DEBUG'
-        desired = False
-        current = True
-        was_changed = Supervisor.change(key, desired, current)
-        return was_changed
-
-    @staticmethod
-    def _polite(desired):
-        '''
-        Relies on schema to perform arg validation.
-        Valid types are  { int, float }
-        '''
-        key = 'SUPERVISOR_POLITE'
-        was_changed = Supervisor.change(key, desired)
-        return was_changed
-
-    @classmethod
-    def set_enabled(cls, data):
-        key = 'enabled'
-        if data.get(key) is True:
-            was_changed = cls._enable()
-        elif data.get(key) is False:
-            was_changed = cls._disable()
-        else:
-            was_changed = 0
-        return was_changed
-
-    @classmethod
-    def set_debug(cls, data):
-        key = 'debug'
-        if data.get(key) is True:
-            was_changed = cls._debug_on()
-        elif data.get(key) is False:
-            was_changed = cls._debug_off()
-        else:
-            was_changed = 0
-        return was_changed
-
-    @classmethod
-    def set_polite(cls, data):
-        key = 'polite'
-        if data.get(key):
-            desired = data.get(key)
-            was_changed = cls._polite(desired)
-        else:
-            was_changed = 0
-        return was_changed
 
     @classmethod
     def handle_changes(cls, data):
+        '''
+        !! externally invoked method !!
+        '''
+        print('DATA|| {}'.format(data))
         before = cls.status()
+        print('BEFORE|| {}'.format(before))
         cls.set_enabled(data)
         cls.set_debug(data)
         cls.set_polite(data)
         after = cls.status()
+        print('AFTER|| {}'.format(after))
         return cmp_dict(before, after)
+
 
     @staticmethod
     def render_msg(data):
+        '''
+        !! externally invoked method !!
+        '''
         reply = []
         if not data:
             pass
@@ -166,3 +102,55 @@ class Supervisor:
             for k, v in data.items():
                 reply.append('{0} ==> {1}'.format(k, v))
         return reply
+
+
+    @classmethod
+    def change(cls, key, value):
+        '''
+        Function by which all current_app config values are modified.
+        '''
+        if value is None:
+            return
+
+        key = cls.slugify(key)
+
+        if current_app.env == 'production':
+            redis_client.set(key, value)
+        else:
+            current_app.config[key] = value
+
+
+    @classmethod
+    def set_enabled(cls, data):
+        key = 'enabled'
+        value = data.get(key)
+        cls.change(key, value)
+
+
+    @classmethod
+    def set_debug(cls, data):
+        key = 'debug'
+        value = data.get(key)
+        cls.change(key, value)
+
+
+    @classmethod
+    def set_polite(cls, data):
+        key = 'polite'
+        value = data.get(key)
+        cls.change(key, value)
+
+
+    @staticmethod
+    def slugify(key):
+        '''
+        before:    'enabled'
+        after:      'SUPERVISOR_ENABLED'
+        '''
+        lowercase = ['supervisor', key]
+        uppercase = [word.upper() for word in lowercase]
+        return '_'.join(uppercase)
+
+
+# only using this for the constructor method
+supervisor = Supervisor()
