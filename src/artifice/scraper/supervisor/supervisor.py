@@ -46,8 +46,16 @@ class Supervisor:
       "polite ==> 6"
     ]
     '''
-    def __init__(self):
-        pass
+    # # Functionality moved to @app.before_first_request
+    # def __init__(self):
+    #     from flask import current_app
+    #     if current_app.env == 'production':
+    #         keys = ['SUPERVISOR_ENABLED', 'SUPERVISOR_DEBUG', 'SUPERVISOR_POLITE']
+    #         for key in keys:
+    #             value = redis_client.get(key)
+    #             if value is None:
+    #                 default = current_app.config.get(key)
+    #                 redis_client.set(key, default)
 
 
     @classmethod
@@ -79,14 +87,11 @@ class Supervisor:
         '''
         !! externally invoked method !!
         '''
-        print('DATA|| {}'.format(data))
         before = cls.status()
-        print('BEFORE|| {}'.format(before))
         cls.set_enabled(data)
         cls.set_debug(data)
         cls.set_polite(data)
         after = cls.status()
-        print('AFTER|| {}'.format(after))
         return cmp_dict(before, after)
 
 
@@ -150,7 +155,3 @@ class Supervisor:
         lowercase = ['supervisor', key]
         uppercase = [word.upper() for word in lowercase]
         return '_'.join(uppercase)
-
-
-# only using this for the constructor method
-supervisor = Supervisor()
