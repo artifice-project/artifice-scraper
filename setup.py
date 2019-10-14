@@ -49,7 +49,7 @@ setup(
     long_description=description_text,
     install_requires=required,
     python_requires='>=3.5.*, <4',
-    packages=find_packages("src"),
+    packages=find_packages("src", exclude=['contrib', 'docs', 'tests', 'lib', 'bin', 'include']),
     package_dir={"": "src"},
     entry_points={
         "console_scripts": [
