@@ -41,3 +41,19 @@ def test_get_returns_specific_content(client, session):
     response = client.get(endpoint + '/1')
 
     assert response.status_code == 200
+
+
+def test_get_returns_pagination_content(client, session):
+    # provide valid args
+    urlencoding = '?begins=9&ends=11'
+    response = client.get(endpoint+urlencoding)
+    assert response.status_code == 200
+    assert response.json.get('msg')['begins'] == 9
+    assert response.json.get('msg')['ends'] == 11
+
+    # provide reversed arguments
+    urlencoding = '?begins=11&ends=9'
+    response = client.get(endpoint+urlencoding)
+    assert response.status_code == 200
+    assert response.json.get('msg')['begins'] == 9
+    assert response.json.get('msg')['ends'] == 11

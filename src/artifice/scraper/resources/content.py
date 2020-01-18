@@ -15,7 +15,7 @@ from artifice.scraper.utils import (
 from artifice.scraper.schemas import (
     content_schema,
     contents_schema,
-    args_schema,
+    pagination_schema,
 )
 
 log = logging.getLogger(__name__)
@@ -30,9 +30,9 @@ class ContentResource(Resource):
         '''
         if _id:
             return self.get_one(_id)
-        args, _ = args_schema.dump(request.get_json())
-        result = db.session.query(Content).limit( \
-                    args.get('limit')).all()
+        args, _ = pagination_schema.dump(request.args)
+        result = db.session.query(Content).filter(Content.id.between(
+                    args['begins'], args['ends'])).all()
         data, _ = contents_schema.dump(result)
         return reply_success(msg=args, reply=data)
 
