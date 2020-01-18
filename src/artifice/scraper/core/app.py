@@ -46,7 +46,8 @@ def create_app(config_file=None, settings_override=None):
     @app.before_request
     def do_before_request():
         # Called before EACH & EVERY REQUEST
-        import artifice.scraper.resources.before as b4
+        # import artifice.scraper.resources.before as b4
+        pass
 
     return app
 
