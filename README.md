@@ -1,5 +1,6 @@
 # Artifice Scraper :scissors:
 
+[![Gitter](https://badges.gitter.im/artifice-project/community.svg)](https://gitter.im/artifice-project/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Build Status](https://travis-ci.org/artifice-project/artifice-scraper.svg?branch=master)](https://travis-ci.org/artifice-project/artifice-scraper)
 [![Maintainability](https://api.codeclimate.com/v1/badges/b6d2a8127db3dd42e77e/maintainability)](https://codeclimate.com/github/artifice-project/artifice-scraper/maintainability)
 [![codecov](https://codecov.io/gh/artifice-project/artifice-scraper/branch/master/graph/badge.svg)](https://codecov.io/gh/artifice-project/artifice-scraper)
