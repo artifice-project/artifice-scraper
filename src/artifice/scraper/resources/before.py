@@ -11,4 +11,5 @@ def initialize_redis_store(keys):
             log.info("REDIS: Key [{}] {}  Value [{}] {}".format(key, type(key), val, type(val)))
             redis_client.set(key, val)
     else:
-        pass
+        for key in keys:
+            assert current_app.config[key] is not None
