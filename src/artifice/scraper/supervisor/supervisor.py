@@ -67,13 +67,13 @@ class Supervisor:
         By default, returns complete dict. Single values can be specifed.
         '''
         if current_app.env == 'production':
-            src = redis_client
+            _enabled =  redis_client.get('SUPERVISOR_ENABLED')
+            _debug =    redis_client.get('SUPERVISOR_DEBUG')
+            _polite =   redis_client.get('SUPERVISOR_POLITE')
         else:
-            src = current_app.config
-
-        _enabled =  src.get('SUPERVISOR_ENABLED')
-        _debug =    src.get('SUPERVISOR_DEBUG')
-        _polite =   src.get('SUPERVISOR_POLITE')
+            _enabled =  current_app.config['SUPERVISOR_ENABLED']
+            _debug =    current_app.config['SUPERVISOR_DEBUG']
+            _polite =   current_app.config['SUPERVISOR_POLITE']
 
         _dict = dict(enabled=_enabled, debug=_debug, polite=_polite)
 

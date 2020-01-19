@@ -39,6 +39,15 @@ def create_app(config_file=None, settings_override=None):
 
     @app.before_first_request
     def do_before_first_request():
+        """
+        Functions registered under this decorator are not executed UNTIL
+        the first request is handled. This might be desired behavior, but
+        it also introduces the risk of the app creation succeeding, only
+        for these operations to raise an exception. To ensure these
+        procedures are called, make sure that any deployment plan includes
+        at least 1 simple request to the app to ensure it that not only
+        is it deployed successfully, but to trigger these procedures.
+        """
         keys = ['SUPERVISOR_ENABLED', 'SUPERVISOR_DEFAULT', 'SUPERVISOR_POLITE']
         import artifice.scraper.resources.before as b4
         b4.initialize_redis_store(keys)
