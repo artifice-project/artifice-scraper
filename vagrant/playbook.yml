@@ -1,0 +1,39 @@
+---
+- name: Vagrant Hello World
+  hosts: default
+  # become: true
+
+  tasks:
+  - name: Running Example Play
+    debug:
+      msg: "hello world, this is a sample play"
+
+  - name: Update Apt
+    become: true
+    apt:
+      upgrade: 'yes'
+      update_cache: 'yes'
+      force_apt_get: true
+      cache_valid_time: 36000
+
+  # - name: Add epel-release repo
+  #   yum:
+  #     name: epel-release
+  #     state: present
+  #
+  - name: Install nginx
+    become: true
+    apt:
+      name: nginx
+      force_apt_get: true
+      state: present
+
+  # - name: Insert Index Page
+  #   template:
+  #     src: index.html
+  #     dest: /usr/share/nginx/html/index.html
+  #
+  - name: Start NGiNX
+    service:
+      name: nginx
+      state: started
