@@ -7,7 +7,7 @@ def initialize_redis_store(keys):
     if current_app.env == 'production':
         from artifice.scraper.redis import redis_client
         for key in keys:
-            log.info("REDIS: Storing [{}] {}".format(key, type(key)))
+            log.info("REDIS: Key [{}] {}  Value [{}] {}".format(key, type(key), val, type(val)))
             val = current_app.config.get(key)
             redis_client.set(key, val)
     else:
