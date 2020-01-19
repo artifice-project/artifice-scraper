@@ -48,7 +48,7 @@ def create_app(config_file=None, settings_override=None):
         at least 1 simple request to the app to ensure it that not only
         is it deployed successfully, but to trigger these procedures.
         """
-        keys = ['SUPERVISOR_ENABLED', 'SUPERVISOR_DEFAULT', 'SUPERVISOR_POLITE']
+        keys = ['SUPERVISOR_ENABLED', 'SUPERVISOR_DEBUG', 'SUPERVISOR_POLITE']
         import artifice.scraper.resources.before as b4
         b4.initialize_redis_store(keys)
 
