@@ -17,6 +17,7 @@ from artifice.scraper.schemas import (
     status_schema,
     queues_schema,
     args_schema,
+    supervisor_schema,
 )
 
 log = logging.getLogger(__name__)
@@ -30,6 +31,7 @@ class StatusResource(Resource):
         '''
         msg = []
         status = Supervisor.status()
+        # status, _ = supervisor_schema.dump(status)
         return reply_success(msg=msg, **status)
 
     @auth

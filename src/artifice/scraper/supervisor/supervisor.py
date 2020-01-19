@@ -46,17 +46,6 @@ class Supervisor:
       "polite ==> 6"
     ]
     '''
-    # # Functionality moved to @app.before_first_request
-    # def __init__(self):
-    #     from flask import current_app
-    #     if current_app.env == 'production':
-    #         keys = ['SUPERVISOR_ENABLED', 'SUPERVISOR_DEBUG', 'SUPERVISOR_POLITE']
-    #         for key in keys:
-    #             value = redis_client.get(key)
-    #             if value is None:
-    #                 default = current_app.config.get(key)
-    #                 redis_client.set(key, default)
-
 
     @classmethod
     def status(cls, key=None):
