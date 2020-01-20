@@ -1,9 +1,10 @@
 ---
 # prepare system and update packages
-- name: update cache
+- name: Update apt & cache
   become: true
   apt:
-    update_cache: yes
+    upgrade: 'yes'
+    update_cache: 'yes'
     force_apt_get: true
     cache_valid_time: 36000
 
