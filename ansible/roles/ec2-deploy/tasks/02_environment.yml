@@ -1,0 +1,11 @@
+---
+# Sets system-wide environment variables
+# https://stackoverflow.com/questions/3582552/postgresql-connection-url
+# https://stackoverflow.com/questions/27733511/how-to-set-linux-environment-variables-with-ansible
+- name: populate /etc/environment
+  lineinfile:
+    dest: "/etc/environment"
+    state: present
+    regexp: "^{{ item.key }}"
+    line: "{{ item.key }}={{ item.value}}"
+  with_items: "{{ os_environment }}"

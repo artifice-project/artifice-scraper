@@ -1,0 +1,23 @@
+---
+# configures celery to run as a daemon process
+# https://stackoverflow.com/questions/14275821/how-to-run-celery-as-a-daemon-in-production
+# https://medium.com/@ahmadalsajid/daemonizing-celery-beat-with-systemd-97f1203e7b32
+- name: Template celeryd config /etc/default/celeryd
+  template:
+    src: templates/celeryd_conf.j2
+    dest: /etc/default/celeryd
+
+- name: Template celeryd service /etc/systemd/system/celeryd.service
+  template:
+    src: templates/celeryd_service.j2
+    dest: /etc/systemd/system/celeryd.service
+
+- name: Restart systemd daemon
+  systemd:
+    daemon_reload: yes
+
+- name: Start systemd celery service
+  systemd:
+    name: celeryd.service
+    state: restarted
+    enabled: yes

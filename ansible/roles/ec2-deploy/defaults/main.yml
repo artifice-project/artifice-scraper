@@ -1,0 +1,53 @@
+---
+# defaults file for ec2-deploy
+
+# application source code
+repo_url: https://github.com/{{ github_user }}/{{ app_name }}.git
+
+# system packages
+packages:
+  - python3-pip
+  - python3-dev
+  - git
+  - tree
+  - nginx
+  - rabbitmq-server
+
+pip_core:
+  - pip
+  - setuptools
+  - wheel
+
+python_core:
+  - virtualenv
+
+postgres_core:
+  - postgresql
+  - postgresql-contrib
+  - postgresql-client-common
+  - python3-psycopg2
+
+# application
+wsgi_path: "{{ entry_point }}.core.wsgi"
+
+log_file_directory: "/home/{{ ansible_ssh_user }}/log"
+flask_log_path: "{{ log_file_directory }}/flask/flask.log"
+gunicorn_error_log: "{{ log_file_directory }}/gunicorn/gunicorn-error.log"
+gunicorn_access_log: "{{ log_file_directory }}/gunicorn/gunicorn-access.log"
+
+# environment variables
+os_environment:
+  - key: SQLALCHEMY_DATABASE_URI
+    value : postgresql+psycopg2://{{ postgres_user }}:{{ postgres_password }}@localhost:5432/{{ postgres_database }}
+
+  - key: CELERY_BROKER_URL
+    value : redis://{{ redis_host }}:{{ redis_port }}/{{ redis_vhost }}
+
+  - key: FLASK_CONFIG_PATH
+    value: "{{ flask_config_path }}"
+
+  - key: LOG_FILE
+    value: "{{ flask_log_path }}"
+
+  - key: AUTH_TOKEN
+    value: supersecrettoken

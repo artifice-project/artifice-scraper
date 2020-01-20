@@ -1,0 +1,7 @@
+---
+# handlers file for ec2-deploy
+- name: restart redis
+  service:
+    name: redis-server
+    state: started
+    # if issues arise with fresh installs, try setting this state value to `restarted`

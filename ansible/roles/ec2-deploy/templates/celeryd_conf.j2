@@ -1,0 +1,23 @@
+## /etc/default/celeryd
+# The names of the workers. This example create one worker
+CELERYD_NODES="worker1"
+
+# The name of the Celery App, should be the same as the python file
+# where the Celery tasks are defined
+CELERY_APP="artifice.scraper.tasks"
+
+# Log and PID directories
+#CELERYD_LOG_FILE="/var/log/app/celery/%n%I.log"
+CELERYD_LOG_FILE="{{ log_file_directory }}/celery/%n%I.log"
+CELERYD_PID_FILE="/var/run/celery/%n.pid"
+
+# Log level
+CELERYD_LOG_LEVEL=DEBUG
+
+# Path to celery binary, that is in your virtual environment
+CELERY_BIN=/home/{{ ansible_ssh_user }}/{{ app_name }}/env/bin/celery
+#CELERY_BIN=/home/ubuntu/artifice-scraper/env/bin/celery
+
+# Options for Celery Beat
+CELERYBEAT_PID_FILE="/var/run/celery/beat.pid"
+CELERYBEAT_LOG_FILE="{{ log_file_directory }}/celery/beat.log"

@@ -1,0 +1,50 @@
+---
+- name: Install base packages
+  become: yes
+  include: 01_system.yml
+  tags: ['system']
+
+- name: Set environment variables
+  become: yes
+  include: 02_environment.yml
+  tags: ['env']
+
+- name: Create logging facilities
+  become: yes
+  include: 03_logging.yml
+  tags: ['logs']
+
+- name: Configure Postgres
+  become: yes
+  include: 04_database.yml
+  tags: ['database']
+
+- name: Configure Redis
+  become: yes
+  include: 05_redis.yml
+  tags: ['redis']
+
+- name: Install application
+  become: no
+  include: 06_app.yml
+  tags: ['app']
+
+- name: Migrate database
+  become: no
+  include: 06a_migration.yml
+  tags: ['migrate']
+
+- name: Configure Celery
+  become: yes
+  include: 07_celery.yml
+  tags: ['celery']
+
+- name: Configure Nginx server
+  become: yes
+  include: 08_server.yml
+  tags: ['server']
+
+- name: Test if site is accessable
+  become: no
+  include: 09_test.yml
+  tags: ['test']

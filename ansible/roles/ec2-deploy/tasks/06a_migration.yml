@@ -1,0 +1,29 @@
+---
+# migrations for app/postgres
+- name: Manager Database initalization
+  command: >
+    env/bin/{{ entry_point }}
+    db
+    init
+  ignore_errors: no
+  args:
+    chdir: /home/{{ ansible_ssh_user }}/{{ app_name }}
+    creates: migrations/
+
+- name: Manager Database migration
+  command: >
+    env/bin/{{ entry_point }}
+    db
+    migrate
+  ignore_errors: yes
+  args:
+    chdir: /home/{{ ansible_ssh_user }}/{{ app_name }}
+
+- name: Manager Database upgrade
+  command: >
+    env/bin/{{ entry_point }}
+    db
+    upgrade
+  ignore_errors: no
+  args:
+    chdir: /home/{{ ansible_ssh_user }}/{{ app_name }}

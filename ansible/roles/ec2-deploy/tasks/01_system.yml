@@ -1,0 +1,24 @@
+---
+# prepare system and update packages
+- name: update cache
+  apt:
+    update_cache: yes
+    force_apt_get: True
+    cache_valid_time: 36000
+
+- name: Install system package dependencies
+  apt:
+    name: "{{ packages }}"
+    state: latest
+    update_cache: yes
+    force_apt_get: True
+
+- name: Upgrade pip core packages
+  pip:
+    name: "{{ pip_core }}"
+    state: latest
+
+- name: Install Python core requirements
+  pip:
+    name: "{{ python_core }}"
+    state: present

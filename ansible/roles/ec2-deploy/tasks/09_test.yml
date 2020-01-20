@@ -1,0 +1,15 @@
+---
+# Run a quick test to verify the site is working
+- name: get url
+  get_url:
+    url: http://{{ inventory_hostname }}/health
+    dest: /tmp/index.html
+    force: yes
+
+- name: read html
+  shell: cat /tmp/index.html
+  register: html_contents
+
+- name: check for string in html
+  when: html_contents.stdout.find('production') != -1
+  debug: msg="success!"

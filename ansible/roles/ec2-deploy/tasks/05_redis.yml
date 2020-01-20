@@ -1,0 +1,26 @@
+---
+# configure the redis-server
+# https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-18-04
+- name: Ensure redis is installed
+  apt:
+    name: redis-server
+    state: present
+    update_cache: yes
+    force_apt_get: yes
+
+- name: Allow systemd supervision
+  lineinfile:
+    path: /etc/redis/redis.conf
+    regexp: "^supervised "
+    line: supervised systemd
+  notify:
+    - restart redis
+
+- name: Test with `Ping` command
+  command: redis-cli -c "ping"
+  register: ping_result
+
+- name: Ensure `Ping` command succeeded
+  assert:
+    that: "ping_result.stdout == 'PONG'"
+    fail_msg: "Redis PING command failed with message 'ping_result.stdout'"
