@@ -4,7 +4,7 @@
   git:
     repo: "{{ repo_url }}"
     dest: /home/{{ ansible_ssh_user }}/{{ app_name }}
-    version: master   # SHA-1 hash, the literal string HEAD, a branch name, or a tag name
+    version: {{ git_branch }}   # SHA-1 hash, the literal string HEAD, a branch name, or a tag name
     update: yes  # Does a git pull if the repo already exists
     force: yes
 
