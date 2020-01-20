@@ -1,0 +1,7 @@
+---
+- name: Test EC2 Deployment Within Vagrant
+  hosts: default
+  become: yes
+  gather_facts: False
+  roles:
+    - role: ec2-deploy

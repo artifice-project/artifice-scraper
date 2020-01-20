@@ -2,14 +2,9 @@
 import logging
 log = logging.getLogger(__name__)
 
-def initialize_redis_store(keys):
-    from flask import current_app
-    if current_app.env == 'production':
-        from artifice.scraper.redis import redis_client
-        for key in keys:
-            val = current_app.config.get(key)
-            log.info("REDIS: Key [{}] {}  Value [{}] {}".format(key, type(key), val, type(val)))
-            redis_client.set(key, val)
-    else:
-        for key in keys:
-            assert current_app.config[key] is not None
+def initialize_redis_store(**kwargs):
+    from artifice.scraper.redis import redis_client
+    for key, val in kwargs.items():
+        log.info("REDIS: Key={} {}  Value={} {}".format(key, type(key), val, type(val)))
+        _ = redis_client.set(key, val)
+        log.debug("REDIS: {}".format(_))

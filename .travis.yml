@@ -24,6 +24,8 @@ services:
 before_script:
   - psql -c 'create database artifice_scraper_test;' -U postgres
   - psql -c 'create database artifice_scraper;' -U postgres
+  - sudo redis-server /etc/redis/redis.conf --port 6379
+  # - sudo redis-server /etc/redis/redis.conf --port 6379 --requirepass 'secret'
 
 script:
   - artifice.scraper test

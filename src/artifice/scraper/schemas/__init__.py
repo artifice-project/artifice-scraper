@@ -1,6 +1,6 @@
 from .base import ma, BaseArgSchema, PaginationSchema
 from .args import QueueArgsSchema
-from .status import StatusSchema
+from .status import StatusSchema, SupervisorSchema
 from .queue import QueueSchema
 from .content import ContentSchema
 
@@ -14,3 +14,4 @@ contents_schema      = ContentSchema(many=True)
 args_schema          = BaseArgSchema()
 queue_args_schema    = QueueArgsSchema()
 pagination_schema    = PaginationSchema()
+supervisor_schema    = SupervisorSchema()

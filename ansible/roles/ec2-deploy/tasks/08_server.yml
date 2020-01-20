@@ -1,0 +1,40 @@
+---
+# set up nginx service, enable, and restart
+- name: Template systemd gunicorn config
+  template:
+    src: templates/gunicorn.j2
+    dest: /etc/systemd/system/{{ app_name }}.service
+
+- name: Start systemd app service
+  systemd:
+    name: "{{ app_name }}.service"
+    state: restarted
+    enabled: yes
+
+- name: Template nginx site config
+  template:
+    src: templates/nginx.j2
+    dest: /etc/nginx/sites-available/{{ app_name }}
+
+- name: Remove existing nginx site config
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+
+- name: Enable nginx site
+  file:
+    src: /etc/nginx/sites-available/{{ app_name }}
+    dest: /etc/nginx/sites-enabled/default
+    state: link
+    force: yes
+
+- name: Restart nginx
+  systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+
+- name: Open firewall
+  ufw:
+    rule: allow
+    name: Nginx Full

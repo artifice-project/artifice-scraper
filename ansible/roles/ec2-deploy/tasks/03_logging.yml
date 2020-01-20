@@ -1,0 +1,32 @@
+---
+# create log directories
+# - name: Create main log directory
+#   file:
+#     path: "{{ log_file_directory }}"
+#     state: directory
+#     owner: "{{ ansible_ssh_user }}"
+#     mode: "0666"
+
+- name: Create flask app log directory
+  file:
+    path: "{{ log_file_directory }}/flask"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+
+- name: Create celery pid directory
+  file:
+    path: /var/run/celery
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+
+- name: Create celery log directory
+  file:
+    path: "{{ log_file_directory }}/celery"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+
+- name: Create gunicorn log directory
+  file:
+    path: "{{ log_file_directory }}/gunicorn"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"

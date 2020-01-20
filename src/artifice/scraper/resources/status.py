@@ -17,6 +17,7 @@ from artifice.scraper.schemas import (
     status_schema,
     queues_schema,
     args_schema,
+    supervisor_schema,
 )
 
 log = logging.getLogger(__name__)
@@ -29,7 +30,7 @@ class StatusResource(Resource):
         returns a json object containing status values
         '''
         msg = []
-        status = Supervisor.status()
+        status, _ = supervisor_schema.dump(Supervisor.status())
         return reply_success(msg=msg, **status)
 
     @auth
@@ -38,16 +39,16 @@ class StatusResource(Resource):
         '''
         allows the status configuration values to be modified
         modified values are echoed back in the `msg` list
+        # TODO: unify how we are calling the SupervisorSchemas
         '''
-        data, errors = status_schema.load(request.get_json())
+        data, errors = supervisor_schema.load(request.get_json())
         if errors:
             log.error({__class__: errors})
             return reply_error(errors)
         elif data:
-            changed = Supervisor.handle_changes(data)
+            changed, _ = supervisor_schema.dump(Supervisor.update(data))
             msg = Supervisor.render_msg(changed)
-            status = Supervisor.status()
-            log.debug(dict(changed=changed))
+            status, _ = supervisor_schema.dump(Supervisor.status())
             return reply_success(msg=msg, **status)
         return reply_empty()
 
@@ -55,6 +56,7 @@ class StatusResource(Resource):
     def put(self):
         '''
         releases any waiting tasks to the queue for processing
+        # TODO: figure out what is gonna be the best way to do this in a controlled manner
         '''
         args, _ = args_schema.dump(request.get_json())
         result = db.session.query(Queue).filter_by(status='READY').limit(args['limit']).all()

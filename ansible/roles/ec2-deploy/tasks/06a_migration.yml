@@ -1,0 +1,35 @@
+---
+# migrations for app/postgres
+- name: WORKAROUND reset ssh connection to reflect updated envvars
+  meta: reset_connection
+  # https://github.com/ansible/ansible/issues/23621
+  # without this, SQLAlchemy will not always find password
+  # and Postgres will throw a ConnectionError
+
+- name: Manager Database initalization
+  command: >
+    env/bin/{{ entry_point }}
+    db
+    init
+  ignore_errors: no
+  args:
+    chdir: /home/{{ ansible_ssh_user }}/{{ app_name }}
+    creates: migrations/
+
+- name: Manager Database migration
+  command: >
+    env/bin/{{ entry_point }}
+    db
+    migrate
+  ignore_errors: yes
+  args:
+    chdir: /home/{{ ansible_ssh_user }}/{{ app_name }}
+
+- name: Manager Database upgrade
+  command: >
+    env/bin/{{ entry_point }}
+    db
+    upgrade
+  ignore_errors: no
+  args:
+    chdir: /home/{{ ansible_ssh_user }}/{{ app_name }}

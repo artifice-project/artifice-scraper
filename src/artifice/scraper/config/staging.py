@@ -27,11 +27,11 @@ CELERYBEAT_SCHEDULE = {
         'schedule': timedelta(minutes=2),
         'args': ()
     },
-    'scheduled_tasks1': {
-        'task': 'tasks.health_check',
-        'schedule': timedelta(minutes=5),
-        'args': ()
-    },
+    # 'scheduled_tasks1': {
+    #     'task': 'tasks.health_check',
+    #     'schedule': timedelta(minutes=5),
+    #     'args': ()
+    # },
 }
 URL_FOR_STATUS = '{0}/status'.format(HOST)
 URL_FOR_QUEUE = '{0}/queue'.format(HOST)
