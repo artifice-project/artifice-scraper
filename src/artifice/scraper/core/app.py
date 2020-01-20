@@ -40,22 +40,19 @@ def create_app(config_file=None, settings_override=None):
     @app.before_first_request
     def do_before_first_request():
         """
-        Functions registered under this decorator are not executed UNTIL
-        the first request is handled. This might be desired behavior, but
-        it also introduces the risk of the app creation succeeding, only
-        for these operations to raise an exception. To ensure these
-        procedures are called, make sure that any deployment plan includes
-        at least 1 simple request to the app to ensure it that not only
-        is it deployed successfully, but to trigger these procedures.
+        Functions registered here are NOT called at time of creation,
+        but rather immediately before the first request is received.
         """
         keys = ['SUPERVISOR_ENABLED', 'SUPERVISOR_DEBUG', 'SUPERVISOR_POLITE']
+        kwargs = dict.fromkeys(keys, None)
+        for key in kwargs.keys():
+            kwargs[key] = app.config[key]
         import artifice.scraper.resources.before as b4
-        b4.initialize_redis_store(keys)
+        b4.initialize_redis_store(**kwargs)
 
     @app.before_request
     def do_before_request():
         # Called before EACH & EVERY REQUEST
-        # import artifice.scraper.resources.before as b4
         pass
 
     return app
@@ -74,7 +71,6 @@ def init_app(app):
     ma.init_app(app)
     from artifice.scraper.redis import redis_client
     redis_client.init_app(app)
-# if not app.testing:                               # dashboard in development
     if not app.env in ('testing', 'development'): # dashboard in production only
         import flask_monitoringdashboard as dashboard
         # dashboard.config.init_from(file='../config/dashboard.cfg')    # OR, env var
