@@ -1,0 +1,41 @@
+---
+- name: Running Describe plays
+  debug:
+    msg: "whats up world, this is the Describe play"
+
+- name: Initialize list var
+  no_log: True
+  set_fact:
+    ip_list: []
+
+- name: Gettings Public IP from instances
+  # no_log: True
+  ec2_instance_facts:
+    region: "{{ region }}"
+    filters:
+      instance-state-name: ["running"]
+      # instance-state-name: ["running", "terminated", "stopped"]
+      # "tag: Name": michael
+  register: ec2_metadata
+
+- name: Add Public IP to list
+  no_log: True
+  set_fact:
+    ip_list: "{{ ip_list }} + [ '{{ item.public_ip_address }}' ]"
+  with_items: "{{ ec2_metadata.instances }}"
+
+- name: Print the list of public IPs
+  debug:
+    var: ip_list
+
+# - name: Print the launch time of each node
+#   debug:
+#     msg: "{{ item.launch_time }}"
+#   with_items: "{{ ec2_metadata.instances }}"
+
+- name: Add hosts to group `discovered`
+  add_host:
+    host: "{{ item }}"
+    groups: discovered
+  with_items: "{{ ip_list }}"
+# host group is stored in-memory, but not to disk

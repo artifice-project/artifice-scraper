@@ -1,0 +1,4 @@
+---
+- name: Running Stop plays
+  debug:
+    msg: "goodbye world, this is the Stop play"

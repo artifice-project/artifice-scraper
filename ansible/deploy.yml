@@ -1,0 +1,7 @@
+---
+- name: Execute EC2 deployment roles
+  hosts: webserver
+  become: yes
+  gather_facts: False
+  roles:
+    - role: ec2-deploy
