@@ -4,6 +4,11 @@ from artifice.scraper.core.app import create_app
 from artifice.scraper.models import db as _db
 from tests.client import ApiTestingResponse
 
+def pytest_addoption(parser):
+    # Allow remote host IP for integration tests to be supplied
+    # Option is only required when using `-k integration`
+    parser.addoption("--testhost", action="store", default=None)
+
 
 @pytest.yield_fixture(scope='session')
 def app():
