@@ -5,6 +5,7 @@ examples/
 bin/
 include/
 migrations/
+data/
 
 # Vagrant
 .vagrant/
