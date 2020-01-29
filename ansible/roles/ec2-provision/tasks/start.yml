@@ -1,0 +1,4 @@
+---
+- name: Running Start plays
+  debug:
+    msg: "hello world, this is the Start play"

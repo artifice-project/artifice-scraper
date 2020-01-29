@@ -1,0 +1,38 @@
+---
+# tasks file for ec2
+# https://github.com/tirupathiogirala/Ansible-Playbook
+- name: Fail play if no tag is supplied
+  fail:
+    msg: "You must specify which task(s) you want to run with  --tags 'start, stop'"
+  when: tags is undefined
+
+- name: Fail play if the var Name is not defined
+  fail:
+    msg: "Specify 'Name' for the cluster with  --extra-vars Name={}"
+  when: Name is undefined
+  tags: ['launch','start','stop','terminate']
+
+
+- name: Describe EC2 running instances
+  include: describe.yml
+  tags: ['describe']
+
+# verify requires  Name=<str>
+- name: Launch a new EC2 instance
+  include: launch.yml
+  tags: ['launch']
+
+# verify requires  Name=<str>
+- name: Start stopped EC2 instance
+  include: start.yml
+  tags: ['start']
+
+# verify requires  Name=<str>
+- name: Stop EC2 instance
+  include: stop.yml
+  tags: ['stop']
+
+# verify requires  Name=<str>
+- name: Terminate EC2 instance
+  include: terminate.yml
+  tags: ['terminate']

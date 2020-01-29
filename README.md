@@ -11,6 +11,9 @@
 <!-- [![Python 3.8](https://img.shields.io/badge/python-3.8-blue.svg)](https://www.python.org/downloads/release/python-380/) -->
 <!-- [![Python 3.9](https://img.shields.io/badge/python-3.9-blue.svg)](https://www.python.org/downloads/release/python-390/) -->
 
+## Quickstart
+The fastest way to create a running instance is with *Vagrant*. Clone the repo and run `vagrant up --provision` from inside `artifice-scraper/vagrant`. You can then visit the instance via HTTP at 77.77.77.7, or via SSH by calling `vagrant ssh`.
+
 ## Installation
 
 ```bash
@@ -81,8 +84,8 @@ To begin scraping, first ensure that the Supervisor is enabled. This can be done
 ```json
 /* REQUEST */
 {
-  "enabled": true,
-  "debug": false
+  "enabled": 1,
+  "debug": 0
 }
 ```
 
@@ -163,19 +166,18 @@ To monitor the queue, utilize the `/queue` endpoint.
 }
 ```
 
-To view the scraped content, utilize the `/content` endpoint. Query parameters can be specified within the request body.
+To view the scraped content, utilize the `/content` endpoint. Query parameters can be specified within the request URL.
 
 `GET` `/content`
 ```json
-/* BODY */
-{
-  "limit": 10
-}
+/* URL */
+http://localhost:5000/content?begins=1&ends=2
 
 /* RESPONSE */
 {
   "msg": {
-    "limit": 10
+    "begins": 1,
+    "ends": 2
   },
   "reply": [
     {
@@ -199,7 +201,7 @@ To temporarily disable the service from scraping, utilize the `/status` endpoint
 ```json
 /* REQUEST */
 {
-  "enabled": false
+  "enabled": 0
 }
 ```
 **Note: it may take some time for the system to empty the entire task queue, as it may have become arbitrarily large during operation. Monitor the `/metrics` endpoint and wait for the number of `TASKED` items to stop increasing.**
@@ -209,7 +211,7 @@ To reenable the service and continue scraping, first utilize the `/status` endpo
 ```json
 /* REQUEST */
 {
-  "enabled": true
+  "enabled": 1
 }
 ```
 Then, you can release the `READY` items to the queue by utilizing the same endpoint with an empty `PUT` request. Verify success by monitoring the `/queue` endpoint and ensuring the number of `READY` items is decreasing as `TASKED` increases.

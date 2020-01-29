@@ -46,9 +46,9 @@ class StatusResource(Resource):
             log.error({__class__: errors})
             return reply_error(errors)
         elif data:
-            changed, _ = supervisor_schema.dump(Supervisor.update(data))
+            changed = Supervisor.update(data)
             msg = Supervisor.render_msg(changed)
-            status, _ = supervisor_schema.dump(Supervisor.status())
+            status = Supervisor.status()
             return reply_success(msg=msg, **status)
         return reply_empty()
 
@@ -62,11 +62,11 @@ class StatusResource(Resource):
         result = db.session.query(Queue).filter_by(status='READY').limit(args['limit']).all()
         for each in result:
             each.status = 'TASKED'
-            if not Supervisor.status()['debug']:
+            if not Supervisor.status(key='debug'):
                 send_to_celery(each.url)
-                log.debug(' * RELEASED {}'.format(each.url))
+                log.debug('[RELEASED] {}'.format(each.url))
             else:
-                log.debug(' * DEBUG {}'.format(each.url))
+                log.debug('[DEBUG] {}'.format(each.url))
         db.session.commit()
         reply = queues_schema.dump(result).data
         return reply_success(msg=args, reply=reply)

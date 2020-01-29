@@ -50,4 +50,4 @@ os_environment:
     value: "{{ flask_log_path }}"
 
   - key: AUTH_TOKEN
-    value: supersecrettoken
+    value: "{{ auth_token }}"

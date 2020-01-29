@@ -1,5 +1,6 @@
 from artifice.scraper.redis import redis_client
 from artifice.scraper.utils import cmp_dict
+from artifice.scraper.schemas import supervisor_schema
 
 import logging
 log = logging.getLogger(__name__)
@@ -45,7 +46,9 @@ class Supervisor:
         _debug =    redis_client.get('SUPERVISOR_DEBUG')
         _polite =   redis_client.get('SUPERVISOR_POLITE')
 
-        result = dict(enabled=_enabled, debug=_debug, polite=_polite)
+        result, _ = supervisor_schema.dump(
+            dict(enabled=_enabled, debug=_debug, polite=_polite)
+        )
         if key:
             return result[key]
         return result

@@ -1,0 +1,58 @@
+---
+# # creates a new ubuntu image with custom security group
+# # provisioning is done with the 'deploy' module
+- name: Running Launch plays
+  debug:
+    msg: "{{ Name }}"
+
+- name: Setting up Security Group
+  ec2_group:
+    name: "{{ security_grp_name }}"
+    description: Rules allowing HTTP traffic on port 80 and 22
+    region: "{{ region }}"
+    rules:
+      - proto: tcp
+        from_port: "{{ http_port }}"
+        to_port: "{{ http_port }}"
+        cidr_ip: "{{ cidr_ip }}"
+      - proto: tcp
+        from_port: "{{ ssh_port }}"
+        to_port: "{{ ssh_port }}"
+        cidr_ip: "{{ cidr_ip }}"
+    rules_egress:
+      - proto: all
+        cidr_ip: "{{ cidr_ip }}"
+
+- name: Provision an EC2 Instance
+  ec2:
+    instance_type: "{{ instance_type }}"
+    key_name: "{{ key_name }}"
+
+    image: "{{ image }}"
+    region: "{{ region }}"
+    wait: "{{ wait }}"
+    wait_timeout: "{{ wait_timeout }}"
+    count: "{{ instance_count }}"
+    instance_tags:
+      Name: "{{ Name }}"
+    monitoring: "{{ monitoring }}"
+    vpc_subnet_id: "{{ vpc_subnet_id }}"
+    assign_public_ip: "{{ assign_public_ip }}"
+    group: "{{ security_grp_name }}"
+  register: ec2_out
+
+- name: Wait for SSH to come up
+  no_log: True
+  wait_for: host={{ item.public_dns_name }} port={{ ssh_port }} delay=60 timeout={{ wait_timeout }} state=started
+  with_items: "{{ ec2_out.instances }}"
+
+- name: Display the public IP of created instance
+  debug:
+    msg: "{{ item.public_ip }}"
+  with_items: "{{ ec2_out.instances }}"
+
+- name: Provide audio feedback when finished
+  say:
+    msg: 'Your instance is ready'
+    voice: Zarvox
+  delegate_to: localhost

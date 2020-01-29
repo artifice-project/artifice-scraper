@@ -103,6 +103,8 @@ def configure_logger(app):
         level=getattr(logging, app.config.get('LOG_LEVEL', 'INFO')),
         handlers=handlers
     )
+    # Adjust logging level on a per-module basis
+    logging.getLogger('apscheduler').setLevel(logging.WARNING)
 
 
 def create_celery_app(app=None):
